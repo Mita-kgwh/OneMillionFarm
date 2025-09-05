@@ -20,4 +20,6 @@ public enum ItemType
 
 
     WORKER = 500,
+
+    FARMTILE = 600,
 }

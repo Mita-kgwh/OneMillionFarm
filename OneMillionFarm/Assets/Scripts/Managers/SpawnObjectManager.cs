@@ -20,7 +20,9 @@ public class SpawnObjectManager : MonoSingleton<SpawnObjectManager>
             return null;
         }
 
-        var workerActor = workerObj.GetComponent<WorkerActor>();
+        var neWorkerObj = Instantiate(workerObj);
+
+        var workerActor = neWorkerObj.GetComponent<WorkerActor>();
 
         return workerActor;
     }

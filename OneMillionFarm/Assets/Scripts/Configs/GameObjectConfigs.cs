@@ -7,8 +7,8 @@ public class GameObjectConfigs : ScriptableObject
 {
     public List<GameObjectConfig> objConfigs;
 
-    private Dictionary<ItemType, GameObjectConfig> dicFindObjConfig;
-
+    private Dictionary<ItemType, GameObjectConfig> dicFindObjConfig = new Dictionary<ItemType, GameObjectConfig>();
+    
     public GameObject GetObjectByType(ItemType _type)
     {
         GameObjectConfig targetObj = null;

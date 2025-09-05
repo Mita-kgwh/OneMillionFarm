@@ -24,4 +24,14 @@ public class GameWorkerData : BaseGameData
 
     public GameWorkerData(int workerID) {  this.workerID = workerID; }
 
+    public GameWorkerData Clone()
+    {
+        var data = new GameWorkerData();
+
+        data.workerID = workerID;
+        data.farmTileID = farmTileID;
+
+        return data;
+    }
+
 }

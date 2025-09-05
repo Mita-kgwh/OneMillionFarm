@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class GameDataManager : MonoSingleton<GameDataManager>
 {
+    [SerializeField] private GameStatsConfigs statsConfigs;
+
+    public GameStatsConfigs StatsConfigs => statsConfigs;
+
     private GameWorkerDatas workerDatas;
 
     public GameWorkerDatas WorkerDatas
@@ -35,13 +39,26 @@ public class GameDataManager : MonoSingleton<GameDataManager>
         }
     }
 
-    public void Init()
+    public override void Init()
+    {
+        LoadData();
+    }
+
+    private void LoadData()
+    {
+        //TODO if have data
+        //Load Data
+        //Else Create New
+        CreateNewData();
+    }
+
+    private void CreateNewData()
     {
         workerDatas = new GameWorkerDatas();
         coinData = new UserGameCoinData();
 
+
         workerDatas.Init();
         coinData.Init();
     }
-
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class WorkerManager : MonoSingleton<WorkerManager>
 {
+    public Transform workerContain;
     public List<WorkerActor> workerActors;
 
     private GameWorkerDatas workerDatas;
@@ -27,6 +28,24 @@ public class WorkerManager : MonoSingleton<WorkerManager>
     private float timeWorkerDoAction = 2f * 60f;
     public static System.Action<WorkerActor> OnCreateAWorker;
 
+    public void StartGame()
+    {
+        if (WorkerDatas == null)
+        {
+            Debug.LogError("Worker Data Null");
+            return;
+        }
+
+        var workerDatasClone = WorkerDatas.GetCloneWorkerDatas();
+        var offset = Vector3.zero;
+        for (int i = 0; i < workerDatasClone.Count; i++)
+        {
+            var worker = CreateWorker(workerDatasClone[i]);
+            worker.transform.localPosition += offset;
+            offset += Vector3.right * 1f;
+        }
+    }
+
     #region 
 
     public WorkerActor BuyWorker()
@@ -42,24 +61,42 @@ public class WorkerManager : MonoSingleton<WorkerManager>
             return null;
         }
 
-        var newWorkerData = WorkerDatas.BuyWorker();
+        var newWorkerData = WorkerDatas.AddWorkerData();
 
         if (newWorkerData == null)
         {
             return null;
         }
 
+        var neWorker = CreateWorker(newWorkerData);
+       
+        return neWorker;
+    }
+
+    private WorkerActor CreateWorker(GameWorkerData workerData)
+    {
+        if (workerData == null)
+        {
+            Debug.LogError("Worker Data null, can not create");
+            return null;
+        }
+
         var neWorker = SpawnObjectManager.Instance.CreateWorker();
-        neWorker.SetUpWorker(newWorkerData.WorkerID);
+        neWorker.SetUpWorker(workerData.WorkerID);
+        var workerTf = neWorker.transform;
+        workerTf.SetParent(workerContain);
+        workerTf.localRotation = Quaternion.identity;
+        workerTf.localPosition = Vector3.zero;
 
         workerActors.Add(neWorker);
         OnCreateAWorker?.Invoke(neWorker);
+
         return neWorker;
     }
 
     public WorkerActor GetFreeWorker()
     {
-        var freeWorkerData = WorkerDatas.GetFreeWorker();
+        var freeWorkerData = WorkerDatas.GetFreeWorkerData();
         
         if (freeWorkerData == null)
         { 

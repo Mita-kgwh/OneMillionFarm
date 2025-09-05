@@ -36,9 +36,32 @@ public class GameWorkerDatas : BaseGameData
     {
         base.Init();
         workerDatas = new List<GameWorkerData>();
+        var statsCf = GameStatsConfigs.Instance;
+        if (statsCf == null)
+        {
+            return;
+        }
+        var startAmount = statsCf.StartWorkerAmount;
+        for (int i = 0; i < startAmount; i++)
+        {
+            AddWorkerData();
+        }
     }
 
-    public GameWorkerData BuyWorker()
+    public List<GameWorkerData> GetCloneWorkerDatas()
+    {
+        var results = new List<GameWorkerData>();
+        if (workerDatas == null)
+            return results;
+
+        for (int i = 0; i < workerDatas.Count; i++)
+        {
+            results.Add(workerDatas[i].Clone());
+        }
+        return results;
+    }
+
+    public GameWorkerData AddWorkerData()
     {
         int newId = startId + workerDatas.Count;
         GameWorkerData workerData = new GameWorkerData(newId);
@@ -48,7 +71,7 @@ public class GameWorkerDatas : BaseGameData
         return workerData;
     }
 
-    public GameWorkerData GetFreeWorker()
+    public GameWorkerData GetFreeWorkerData()
     {
         for (int i = 0; i < workerDatas.Count; i++)
         {
@@ -59,8 +82,6 @@ public class GameWorkerDatas : BaseGameData
         }
 
         return null;
-    }
-
-    
+    }   
 
 }
