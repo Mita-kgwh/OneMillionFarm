@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class GameWorkerDatas : BaseGameData
 {
     public static GameWorkerDatas Instance
@@ -30,7 +31,18 @@ public class GameWorkerDatas : BaseGameData
         }
     }
 
-    private int startId = 1000;
+    public List<GameWorkerData> GetCloneWorkerDatas()
+    {
+        var results = new List<GameWorkerData>();
+        if (workerDatas == null)
+            return results;
+
+        for (int i = 0; i < workerDatas.Count; i++)
+        {
+            results.Add(workerDatas[i].Clone());
+        }
+        return results;
+    }
 
     public override void Init()
     {
@@ -47,19 +59,8 @@ public class GameWorkerDatas : BaseGameData
             AddWorkerData();
         }
     }
-
-    public List<GameWorkerData> GetCloneWorkerDatas()
-    {
-        var results = new List<GameWorkerData>();
-        if (workerDatas == null)
-            return results;
-
-        for (int i = 0; i < workerDatas.Count; i++)
-        {
-            results.Add(workerDatas[i].Clone());
-        }
-        return results;
-    }
+    
+    private int startId = 1000;
 
     public GameWorkerData AddWorkerData()
     {

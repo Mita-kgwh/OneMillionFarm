@@ -32,7 +32,7 @@ public class WorkerManager : MonoSingleton<WorkerManager>
     {
         if (WorkerDatas == null)
         {
-            Debug.LogError("Worker Data Null");
+            Debug.LogError("Worker Datas Null, can not start game");
             return;
         }
 
@@ -87,6 +87,7 @@ public class WorkerManager : MonoSingleton<WorkerManager>
         workerTf.SetParent(workerContain);
         workerTf.localRotation = Quaternion.identity;
         workerTf.localPosition = Vector3.zero;
+        neWorker.gameObject.name = $"Worker_{workerData.WorkerID}";
 
         workerActors.Add(neWorker);
         OnCreateAWorker?.Invoke(neWorker);

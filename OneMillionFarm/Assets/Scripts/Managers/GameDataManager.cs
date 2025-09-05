@@ -6,6 +6,8 @@ public class GameDataManager : MonoSingleton<GameDataManager>
 {
     [SerializeField] private GameStatsConfigs statsConfigs;
 
+    public static System.Action OnLoadDataDone;
+
     public GameStatsConfigs StatsConfigs => statsConfigs;
 
     private GameWorkerDatas workerDatas;
@@ -20,6 +22,22 @@ public class GameDataManager : MonoSingleton<GameDataManager>
                 workerDatas.Init();
             }
             return workerDatas; 
+        }
+    }
+
+    private GameFarmTileDatas farmTileDatas;
+
+    public GameFarmTileDatas FarmTileDatas
+    {
+        get
+        {
+            if (farmTileDatas == null)
+            {
+                farmTileDatas = new GameFarmTileDatas();
+                farmTileDatas.Init();
+            }
+
+            return farmTileDatas;
         }
     }
 
@@ -41,24 +59,28 @@ public class GameDataManager : MonoSingleton<GameDataManager>
 
     public override void Init()
     {
-        LoadData();
+        StartCoroutine(LoadData());
     }
 
-    private void LoadData()
+    private IEnumerator LoadData()
     {
         //TODO if have data
         //Load Data
         //Else Create New
         CreateNewData();
+        yield return new WaitForSeconds(0.5f);
+        OnLoadDataDone?.Invoke();
     }
 
     private void CreateNewData()
     {
         workerDatas = new GameWorkerDatas();
+        farmTileDatas = new GameFarmTileDatas();
         coinData = new UserGameCoinData();
 
 
         workerDatas.Init();
-        coinData.Init();
+        farmTileDatas.Init();
+        coinData.Init();      
     }
 }

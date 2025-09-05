@@ -4,14 +4,42 @@ using UnityEngine;
 
 public class GameManager : MonoSingleton<GameManager>
 {
-    private void Start()
+    public override void Init()
+    {
+        base.Init();
+        UnassignCallback();
+        AssignCallback();
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        UnassignCallback();
+    }
+
+    private void AssignCallback()
+    {
+        GameDataManager.OnLoadDataDone += OnLoadDataDoneCallback;
+    }
+
+    private void UnassignCallback()
+    {
+        GameDataManager.OnLoadDataDone -= OnLoadDataDoneCallback;
+    }
+
+    #region Callback
+
+    private void OnLoadDataDoneCallback()
     {
         StartGame();
     }
 
+    #endregion
+
     private void StartGame()
     {
         //Create Farm Tile
+        FarmTileManager.Instance.StartGame();
 
         //Create Plant/Cow
 

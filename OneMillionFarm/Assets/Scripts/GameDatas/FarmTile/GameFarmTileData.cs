@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class GameWorkerData : BaseGameData
+public class GameFarmTileData : BaseGameData
 {
     public int workerID;
 
@@ -13,26 +13,25 @@ public class GameWorkerData : BaseGameData
 
     public int FarmTileID => farmTileID;
 
-    public bool IsFree 
+    public bool IsFree
     {
         get
         {
-            return farmTileID <= 0;
+            return workerID <= 0;
         }
     }
 
-    public GameWorkerData() { }
+    public GameFarmTileData() { }
 
-    public GameWorkerData(int workerID) {  this.workerID = workerID; }
+    public GameFarmTileData(int _farmID) { this.farmTileID = _farmID; }
 
-    public GameWorkerData Clone()
+    public GameFarmTileData Clone()
     {
-        var data = new GameWorkerData();
+        var data = new GameFarmTileData();
 
         data.workerID = workerID;
         data.farmTileID = farmTileID;
 
         return data;
     }
-
 }

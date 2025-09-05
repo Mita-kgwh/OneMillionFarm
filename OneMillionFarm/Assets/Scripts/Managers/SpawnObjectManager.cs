@@ -26,4 +26,25 @@ public class SpawnObjectManager : MonoSingleton<SpawnObjectManager>
 
         return workerActor;
     }
+    
+    public FarmTile CreateFarmTile()
+    {
+        if (objectConfigs == null)
+        {
+            return null;
+        }
+
+        var farmTileObj = objectConfigs.GetObjectByType(ItemType.FARMTILE);
+
+        if (farmTileObj == null)
+        {
+            return null;
+        }
+
+        var neFarmTileObj = Instantiate(farmTileObj);
+
+        var farmTile = neFarmTileObj.GetComponent<FarmTile>();
+
+        return farmTile;
+    }
 }

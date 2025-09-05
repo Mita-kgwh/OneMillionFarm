@@ -334,19 +334,19 @@ public class GridObjectLayoutGroup : MonoBehaviour
 
         switch (startCorner)
         {
-            case Corner.UpperLeft:
+            case Corner.LowerLeft:
                 // Standard: A+ right, X+ forward (into screen)
                 position = new Vector3(worldX, yPosition, worldZ);
                 break;
-            case Corner.UpperRight:
+            case Corner.LowerRight:
                 // Flip A-axis: A+ left, X+ forward
                 position = new Vector3(-worldX, yPosition, worldZ);
                 break;
-            case Corner.LowerLeft:
+            case Corner.UpperLeft:
                 // Flip X-axis: A+ right, X+ backward
                 position = new Vector3(worldX, yPosition, -worldZ);
                 break;
-            case Corner.LowerRight:
+            case Corner.UpperRight:
                 // Flip both: A+ left, X+ backward
                 position = new Vector3(-worldX, yPosition, -worldZ);
                 break;
@@ -367,19 +367,19 @@ public class GridObjectLayoutGroup : MonoBehaviour
 
         switch (startCorner)
         {
-            case Corner.UpperLeft:
+            case Corner.LowerLeft:
                 gridX = localPos.x;
                 gridZ = localPos.z;
                 break;
-            case Corner.UpperRight:
+            case Corner.LowerRight:
                 gridX = -localPos.x;
                 gridZ = localPos.z;
                 break;
-            case Corner.LowerLeft:
+            case Corner.UpperLeft:
                 gridX = localPos.x;
                 gridZ = -localPos.z;
                 break;
-            case Corner.LowerRight:
+            case Corner.UpperRight:
                 gridX = -localPos.x;
                 gridZ = -localPos.z;
                 break;

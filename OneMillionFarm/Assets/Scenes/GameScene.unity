@@ -489,8 +489,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startCorner: 0
   startAxis: 0
-  cellSize: {x: 1, y: 1, z: 0}
-  spacing: {x: 0, y: 0}
+  cellSize: {x: 1, y: 1, z: 1}
+  spacing: {x: 0.2, y: 0.2}
   constraint: 1
   constraintCount: 5
   childAlignment: 4
@@ -898,8 +898,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09af9b219e48e7f46a7ddcbcfe721fdc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  row: 0
-  col: 0
+  gridLayout3D: {fileID: 845266025}
+  gridContainTf: {fileID: 845266024}
   tiles: []
 --- !u!1 &1909721157
 GameObject:
