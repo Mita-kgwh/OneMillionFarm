@@ -14,14 +14,19 @@ public class SlotItemUI : MonoBehaviour, IPointerClickHandler
 
     private int slotIndex;
     private SlotType slotType;
+    private ItemType itemType;
 
-    public static System.Action<SlotType, int> OnClickASlotItemUI;
+    public static System.Action<SlotItemUI> OnClickASlotItemUI;
 
     public int SlotIndex => this.slotIndex;
+    public SlotType SlotType => this.slotType;
+    public ItemType ItemType => this.itemType;
 
-    public SlotItemUI SetIndex(int index)
+    public SlotItemUI SetIndex(int index, SlotType slotType)
     {
-        slotIndex = index;
+        this.slotIndex = index;
+        this.slotType = slotType;
+        this.name = $"Slot_{slotIndex}";
         return this;
     }
 
@@ -33,6 +38,7 @@ public class SlotItemUI : MonoBehaviour, IPointerClickHandler
 
         quantityText.gameObject.SetActive(true);
         quantityText.text = itemData.Amount.ToString();
+        this.itemType = itemData.ItemType;
     }
 
     public virtual void SetEmpty()
@@ -44,7 +50,7 @@ public class SlotItemUI : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        OnClickASlotItemUI?.Invoke(this.slotType, this.slotIndex);
+        OnClickASlotItemUI?.Invoke(this);
     }
 
     public void HighLight(bool highlight)

@@ -14,6 +14,11 @@ public class BaseDialog : MonoBehaviour
 
     protected float transitionTime = 0.2f;
 
+    public static System.Action<BaseDialog> OnShowDialog;
+    public static System.Action<BaseDialog> OnCompleteShowDialog;
+    public static System.Action<BaseDialog> OnHideDialog;
+    public static System.Action<BaseDialog> OnCompleteHideDialog;
+
     public virtual void ShowDialog()
     {
         this.gameObject.SetActive(true);
@@ -28,6 +33,7 @@ public class BaseDialog : MonoBehaviour
             this.canvasGroup.alpha = 0;
 
         }
+        OnShowDialog?.Invoke(this);
         Sequence seq = DOTween.Sequence();
         seq.Join(this.panel.DOScale(1f, this.transitionTime).SetEase(Ease.OutBack).OnComplete(this.OnCompleteShow));
         if (this.canvasGroup != null)
@@ -38,7 +44,7 @@ public class BaseDialog : MonoBehaviour
 
     protected virtual void OnCompleteShow()
     {
-
+        OnCompleteShowDialog?.Invoke(this);
     }
 
     public virtual void CloseDialog()
@@ -47,6 +53,7 @@ public class BaseDialog : MonoBehaviour
     }
     protected virtual void AnimationHide()
     {
+        OnHideDialog?.Invoke(this);
         Sequence seq = DOTween.Sequence();
         seq.Join(this.panel.DOScale(0.0f, this.transitionTime).SetEase(Ease.Linear).OnComplete(this.OnCompleteHide));
         if (this.canvasGroup != null)
@@ -58,5 +65,6 @@ public class BaseDialog : MonoBehaviour
     protected virtual void OnCompleteHide()
     {
         this.gameObject.SetActive(false);
+        OnCompleteHideDialog?.Invoke(this);
     }
 }

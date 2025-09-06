@@ -2,11 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FarmTile : MonoBehaviour
+public class FarmTile : BaseObject
 {
-    public int farmID;
-
-    public int FarmID => this.farmID;
+    public int FarmID => this.objectID;
 
     public static System.Action<FarmTile> OnFarmTileFree;
 
@@ -29,7 +27,7 @@ public class FarmTile : MonoBehaviour
     /// <returns></returns>
     public FarmTile SetUpFarmTile(int _farmID)
     {
-        this.farmID = _farmID;
+        this.objectID = _farmID;
         return this;
     }
 
@@ -64,5 +62,35 @@ public class FarmTile : MonoBehaviour
     {
         this.creatureItem = null;
         return this;
+    }
+
+    public override void DoInteractAction()
+    {
+        base.DoInteractAction();
+        Debug.Log($"This is Farm Tile {objectID}");
+        var slotItem = SlotsClickManager.Instance.CurrentSlotItemUI;
+        if (slotItem == null)
+        {
+            return;
+        }
+
+        bool useSuccess = GameStorageItemDatas.Instance.UseStorageItemData(slotItem.SlotIndex);
+        if (useSuccess)
+        {
+            var createData = new GameCreatureData(ConvertItemCreature(slotItem.ItemType), this.objectID);
+            createData.SetStartTime(GameUltis.GetLocalLongTime());
+            var createObj = CreaturesManager.Instance.CreateCreatureItem(createData);
+            if (createObj != null)
+            {
+                this.creatureItem = createObj;
+                this.creatureItem.transform.position = this.transform.position;
+            }        
+        }
+        OnInteractAction?.Invoke(slotItem.ItemType, useSuccess);
+
+        ItemType ConvertItemCreature(ItemType seedType)
+        {
+            return (ItemType)((int)seedType + 100); 
+        }
     }
 }

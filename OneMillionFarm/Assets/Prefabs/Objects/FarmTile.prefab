@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4989164928275215777}
   - component: {fileID: 4051867785774545248}
   - component: {fileID: 7119121068680201807}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FarmTile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec62796f241d51941866e6205f82ce5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  objectType: 600
   farmID: 0
 --- !u!65 &7119121068680201807
 BoxCollider:
@@ -77,7 +78,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4313233479214705501}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ModelContain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -111,8 +112,7 @@ GameObject:
   - component: {fileID: 8371208797925732119}
   - component: {fileID: 7301425753458179960}
   - component: {fileID: 6084285092045807811}
-  - component: {fileID: 6751352763710837728}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -184,24 +184,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &6751352763710837728
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6288383260446063337}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}

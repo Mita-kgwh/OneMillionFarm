@@ -2,11 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WorkerActor : MonoBehaviour
+public class WorkerActor : BaseObject
 {
-    public int workerId;
-
-    public int WorkerId => this.workerId;
+    public int WorkerId => this.objectID;
 
     private FarmTile workingFarmTile;
     
@@ -17,7 +15,7 @@ public class WorkerActor : MonoBehaviour
     /// <returns></returns>
     public WorkerActor SetUpWorker(int workerId)
     {
-        this.workerId = workerId;
+        this.objectID = workerId;
         return this;
     }
 
@@ -47,5 +45,10 @@ public class WorkerActor : MonoBehaviour
         this.workingFarmTile = null;
 
         return this;
+    }
+    public override void DoInteractAction()
+    {
+        base.DoInteractAction();
+        Debug.Log($"This is Worker {objectID}");
     }
 }

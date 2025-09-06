@@ -12,9 +12,9 @@ TagManager:
   - Water
   - UI
   - 
-  - 
-  - 
-  - 
+  - Raycastable
+  - Unraycastable
+  - Blocker
   - 
   - 
   - 

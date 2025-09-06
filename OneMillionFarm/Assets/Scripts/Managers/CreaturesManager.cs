@@ -5,11 +5,13 @@ using UnityEngine;
 
 public class CreaturesManager : MonoSingleton<CreaturesManager>
 {
+    [SerializeField] private CreatureStatsConfigs creatureStatsConfigs;
     [SerializeField] private Transform creatureContainTf;
     private Dictionary<ItemType, Dictionary<int, BaseCreatureItem>> activeCreaturePools = new Dictionary<ItemType, Dictionary<int, BaseCreatureItem>>();
     private Dictionary<ItemType, Queue<BaseCreatureItem>> freeCreaturePools = new Dictionary<ItemType, Queue<BaseCreatureItem>>();
 
     public static System.Action<BaseCreatureItem> OnCreateACreature;
+    private int startIdCounter = 5000;
 
     private GameCreatureDatas creatureDatas;
 
@@ -23,6 +25,23 @@ public class CreaturesManager : MonoSingleton<CreaturesManager>
             }
             return creatureDatas;
         }
+    }
+
+    public CreatureStatsConfigs CreatureStatsConfigs => creatureStatsConfigs;
+
+    public override void Init()
+    {
+        base.Init();
+    }
+
+    private void AssignCallback()
+    {
+
+    }
+
+    private void UnassignCallback()
+    {
+
     }
 
     public void StartGame()
@@ -56,6 +75,7 @@ public class CreaturesManager : MonoSingleton<CreaturesManager>
             return null;
         }
 
+        neCreature.StartTimer();
         OnCreateACreature?.Invoke(neCreature);
         return neCreature;
     }
@@ -89,6 +109,8 @@ public class CreaturesManager : MonoSingleton<CreaturesManager>
                 return null;
             }
             neCreature.transform.SetParent(creatureContainTf);
+            neCreature.SetObjectID(startIdCounter);
+            startIdCounter++;
         }
         //Add to active
         AddCreature2ActivePool(neCreature);
@@ -103,13 +125,13 @@ public class CreaturesManager : MonoSingleton<CreaturesManager>
             return;
         }
         Dictionary<int, BaseCreatureItem> activeDic;
-        if (!activeCreaturePools.TryGetValue(creatureItem.CreatureType, out activeDic))
+        if (!activeCreaturePools.TryGetValue(creatureItem.ObjectType, out activeDic))
         {
             //This type doesnt have dic active
             activeDic = new Dictionary<int, BaseCreatureItem>();
-            if (!activeCreaturePools.TryAdd(creatureItem.CreatureType, activeDic))
+            if (!activeCreaturePools.TryAdd(creatureItem.ObjectType, activeDic))
             {
-                Debug.LogError($"Can not add {creatureItem.CreatureType} dic to dic active pool");
+                Debug.LogError($"Can not add {creatureItem.ObjectType} dic to dic active pool");
             }
         }
 

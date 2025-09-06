@@ -17,3 +17,11 @@ MonoBehaviour:
     gameObj: {fileID: 1405585653372872886, guid: 577cf69e021b0c14fa926838752f201c, type: 3}
   - objType: 600
     gameObj: {fileID: 1960493546292025949, guid: a020b8041e2253f4b9cea380a825d889, type: 3}
+  - objType: 200
+    gameObj: {fileID: 5319541370037496613, guid: c41dc0ccbab4744458ca31c895624864, type: 3}
+  - objType: 201
+    gameObj: {fileID: 1801947629802779979, guid: 99576023a9e7e944294b9cca62262fdc, type: 3}
+  - objType: 202
+    gameObj: {fileID: 696530453894620920, guid: 7f6d0df42e4deac47b3b5639152189ef, type: 3}
+  - objType: 203
+    gameObj: {fileID: 2800553484634922036, guid: 019eb19505da11048b94157f1821f405, type: 3}

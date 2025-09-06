@@ -17,6 +17,8 @@ public class GameStorageItemDatas : BaseGameData
         }
     }
 
+    public static System.Action OnStorageDataChange;
+
     public List<GameStorageItemData> storageItemDatas;
 
     public List<GameStorageItemData> StorageItemDatas
@@ -82,7 +84,25 @@ public class GameStorageItemDatas : BaseGameData
         return false;
     }
 
-    public GameStorageItemData GetGameStorageItemData(int slotId)
+    public bool UseStorageItemData(int slotId, int amount = 1)
+    {
+        if (amount <= 0)
+        {
+            return false;
+        }
+        var itemData = GetGameStorageItemData(slotId);
+        if (itemData == null)
+        {
+            Debug.LogError("This slot data null, can not use");
+            return false;
+        }
+
+        itemData.AddAmount(-amount);
+
+        return true;
+    }
+
+    private GameStorageItemData GetGameStorageItemData(int slotId)
     {
         GameStorageItemData itemData = null;
         if (!dicFindStorageItem.TryGetValue(slotId, out itemData))
@@ -99,5 +119,37 @@ public class GameStorageItemDatas : BaseGameData
         }
 
         return itemData;
+    }
+
+    public GameStorageItemData GetCloneGameStorageItemData(int slotId)
+    {
+        GameStorageItemData cloneItemData = null;
+        GameStorageItemData orgItemData = GetGameStorageItemData(slotId);
+        if (orgItemData != null)
+        {
+            cloneItemData = orgItemData.Clone();
+        }
+        return cloneItemData;
+    }
+
+    public void SwitchStorageItemData(int slotID1, int slotID2)
+    {
+        var data1 = GetGameStorageItemData(slotID1);
+        var data2 = GetGameStorageItemData(slotID2);
+        dicFindStorageItem.Remove(slotID1);
+        dicFindStorageItem.Remove(slotID2);
+        if (data1 != null)
+        {            
+            data1.SetSlotID(slotID2);
+            dicFindStorageItem.TryAdd(slotID2, data1);
+        }
+
+        if (data2 != null)
+        {
+            data2.SetSlotID(slotID1);
+            dicFindStorageItem.TryAdd(slotID1, data2);
+        }
+
+        OnStorageDataChange?.Invoke();
     }
 }

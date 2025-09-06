@@ -64,4 +64,15 @@ public class ItemTypeAmount
         clone.amount = this.amount;
         return clone;
     }
+
+    public ItemTypeAmount AddAmount(int _amount)
+    {
+        this.amount += _amount;
+        if (this.amount <= 0)
+        {
+            this.amount = 0;
+        }
+
+        return this;
+    }
 }

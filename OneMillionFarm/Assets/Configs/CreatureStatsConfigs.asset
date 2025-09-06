@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8511b8ddd1e8cc641928f4d47a2eb67c, type: 3}
+  m_Name: CreatureStatsConfigs
+  m_EditorClassIdentifier: 
+  StatsConfigs:
+  - creatureType: 200
+    cycleTimeBySec: 600
+    cycleLifeCount: 40
+  - creatureType: 201
+    cycleTimeBySec: 900
+    cycleLifeCount: 40
+  - creatureType: 202
+    cycleTimeBySec: 300
+    cycleLifeCount: 20
+  - creatureType: 203
+    cycleTimeBySec: 1800
+    cycleLifeCount: 100
+  timeCreatureRottenBySec: 3600

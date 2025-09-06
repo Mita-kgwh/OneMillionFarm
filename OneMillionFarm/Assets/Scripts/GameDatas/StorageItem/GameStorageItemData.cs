@@ -57,4 +57,15 @@ public class GameStorageItemData : BaseGameData
         clone.slotId = this.slotId;
         return clone;
     }
+
+    public GameStorageItemData SetSlotID(int slotId)
+    {
+        this.slotId = slotId;
+        return this;
+    }
+
+    public void AddAmount(int amount) 
+    {
+        TypeAmount.AddAmount(amount);
+    }
 }

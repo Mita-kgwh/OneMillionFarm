@@ -4,12 +4,7 @@ using UnityEngine;
 
 public class InventoryDialog : BaseDialog
 {
-    [SerializeField] protected SlotItemUI slotPf;
-    [SerializeField] protected Transform slotsContain;
-    [SerializeField] protected List<SlotItemUI> slots = new List<SlotItemUI>();
-    [SerializeField] protected int initSlotCount = 7;
-
-    private Dictionary<int, SlotItemUI> dicFindSlots = new Dictionary<int, SlotItemUI>();
+    [SerializeField] protected SlotItemLayout slotItemLayout;
     private bool inited = false;
 
     public static InventoryDialog DoShowDialog()
@@ -29,59 +24,30 @@ public class InventoryDialog : BaseDialog
         return null;
     }
 
-    public void InitDialog()
+    private void InitDialog()
     {
-        if (slotPf == null) 
+        if (slotItemLayout == null)
         {
-            Debug.LogError("Slot Pf null");
+            Debug.LogError("Slot item layout null");
             return;
         }
-
-        if (slotsContain == null)
-            slotsContain = this.transform;
-
-        while (slots.Count <= initSlotCount)
-        {
-            slots.Add(Instantiate(slotPf, slotsContain));
-        }
-
-        for (int i = 0; i < slots.Count; i++)
-        {
-            slots[i].SetIndex(i)
-                    .SetEmpty();
-            dicFindSlots.TryAdd(i, slots[i]);
-        }
-
-        if (slots.Count > initSlotCount)
-        {
-            //Deactive redundant slot
-            for (int i = initSlotCount; i < slots.Count; i++)
-            {
-                slots[i].gameObject.SetActive(false);
-            }
-        }
-       
+        slotItemLayout.InitLayout(SlotType.INVENTORY);
     }
 
     public void ParseData(List<GameStorageItemData> itemDatas)
     {
+        if (slotItemLayout == null)
+        {
+            Debug.LogError("Slot item layout null");
+            return;
+        }
+
         if (!inited)
         {
             InitDialog();
             inited = true;
         }
-
-        if (itemDatas == null)
-        {
-            return;
-        }
-
-        for (int i = 0; i < itemDatas.Count; i++)
-        {
-            if (dicFindSlots.TryGetValue(itemDatas[i].SlotID, out var slotItem))
-            {
-                slotItem.SetItem(itemDatas[i]);
-            }
-        }
+        
+        slotItemLayout.ParseData(itemDatas);        
     }
 }
