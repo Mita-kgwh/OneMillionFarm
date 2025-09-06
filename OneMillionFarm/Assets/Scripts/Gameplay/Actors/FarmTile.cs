@@ -18,7 +18,7 @@ public class FarmTile : MonoBehaviour
     /// <summary>
     /// Plant or Animal on Tile
     /// </summary>
-    private CreatureItem creatureItem;
+    private BaseCreatureItem creatureItem;
 
     public bool IsFree => creatureItem == null;
 
@@ -51,6 +51,18 @@ public class FarmTile : MonoBehaviour
     public FarmTile UnassignWorker()
     {
         this.workerActor = null;
+        return this;
+    }
+
+    public FarmTile AssignCreatureItem(BaseCreatureItem creatureItem)
+    {
+        this.creatureItem = creatureItem;
+        return this;
+    }
+
+    public FarmTile UnassignCreatureItem()
+    {
+        this.creatureItem = null;
         return this;
     }
 }

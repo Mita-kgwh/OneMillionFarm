@@ -34,7 +34,7 @@ public class GameWorkerDatas : BaseGameData
     public List<GameWorkerData> GetCloneWorkerDatas()
     {
         var results = new List<GameWorkerData>();
-        if (workerDatas == null)
+        if (WorkerDatas == null)
             return results;
 
         for (int i = 0; i < workerDatas.Count; i++)

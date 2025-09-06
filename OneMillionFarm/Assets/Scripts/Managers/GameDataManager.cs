@@ -41,6 +41,22 @@ public class GameDataManager : MonoSingleton<GameDataManager>
         }
     }
 
+    private GameCreatureDatas creatureDatas;
+
+    public GameCreatureDatas CreatureDatas
+    {
+        get
+        {
+            if(creatureDatas == null)
+            {
+                creatureDatas = new GameCreatureDatas();
+                creatureDatas.Init();
+            }
+
+            return creatureDatas;
+        }
+    }
+
     private UserGameCoinData coinData;
 
     public UserGameCoinData CoinData
@@ -76,11 +92,13 @@ public class GameDataManager : MonoSingleton<GameDataManager>
     {
         workerDatas = new GameWorkerDatas();
         farmTileDatas = new GameFarmTileDatas();
+        creatureDatas = new GameCreatureDatas();
         coinData = new UserGameCoinData();
 
 
         workerDatas.Init();
         farmTileDatas.Init();
+        creatureDatas.Init();
         coinData.Init();      
     }
 }

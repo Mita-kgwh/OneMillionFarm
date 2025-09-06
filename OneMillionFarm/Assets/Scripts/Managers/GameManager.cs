@@ -42,6 +42,7 @@ public class GameManager : MonoSingleton<GameManager>
         FarmTileManager.Instance.StartGame();
 
         //Create Plant/Cow
+        CreaturesManager.Instance.StartGame();
 
         //Create Worker
         WorkerManager.Instance.StartGame();

@@ -6,6 +6,27 @@ public class SpawnObjectManager : MonoSingleton<SpawnObjectManager>
 {
     [SerializeField] private GameObjectConfigs objectConfigs;
 
+    public BaseCreatureItem CreateCreature(ItemType creatureType)
+    {
+        if (objectConfigs == null)
+        {
+            return null;
+        }
+
+        var creatureObj = objectConfigs.GetObjectByType(creatureType);
+
+        if (creatureObj == null)
+        {
+            return null;
+        }
+
+        var neCreatureObj = Instantiate(creatureObj);
+
+        var baseCreatureItem = neCreatureObj.GetComponent<BaseCreatureItem>();
+
+        return baseCreatureItem;
+    }
+
     public WorkerActor CreateWorker()
     {
         if (objectConfigs == null)

@@ -36,7 +36,7 @@ public class GameFarmTileDatas : BaseGameData
     public List<GameFarmTileData> GetCloneFarmTileDatas()
     {
         var results = new List<GameFarmTileData>();
-        if (farmTileDatas == null)
+        if (FarmTileDatas == null)
             return results;
 
         for (int i = 0; i < farmTileDatas.Count; i++)

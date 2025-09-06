@@ -82,6 +82,11 @@ public class WorkerManager : MonoSingleton<WorkerManager>
         }
 
         var neWorker = SpawnObjectManager.Instance.CreateWorker();
+        if (neWorker == null)
+        {
+            Debug.LogError("SpawnObjectManager create null worker");
+            return null;
+        }
         neWorker.SetUpWorker(workerData.WorkerID);
         var workerTf = neWorker.transform;
         workerTf.SetParent(workerContain);
