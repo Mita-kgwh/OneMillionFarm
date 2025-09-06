@@ -40,8 +40,14 @@ public class CreaturesManager : MonoSingleton<CreaturesManager>
         }
     }
 
-    public BaseCreatureItem CreateCreatureItem(ItemType creatureType, int farmId)
+    public BaseCreatureItem CreateCreatureItem(GameCreatureData creatureData)
     {
+        if (creatureData == null)
+        {
+            Debug.LogError("Creature Data Null, can not create");
+            return null;
+        }
+        ItemType creatureType = creatureData.CreatureType;
         BaseCreatureItem neCreature = GetFreeCreatureItem(creatureType);
 
         if (neCreature == null)

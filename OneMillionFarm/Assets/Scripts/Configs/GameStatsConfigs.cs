@@ -23,6 +23,18 @@ public class GameStatsConfigs : ScriptableObject
     public int startEquipmentLv = 1;
     [Header("Items Starter")]
     public List<ItemTypeAmount> itemAmounts = new List<ItemTypeAmount>();
+
+    public List<ItemTypeAmount> ItemAmountClone()
+    {
+        var results = new List<ItemTypeAmount>();
+
+        for (int i = 0; i < itemAmounts.Count; i++)
+        {
+            results.Add(itemAmounts[i].Clone());
+        }
+
+        return results;
+    }
 }
 
 [System.Serializable]
@@ -30,4 +42,26 @@ public class ItemTypeAmount
 {
     public ItemType itemType;
     public int amount;
+
+    public int Amount => amount;
+    public ItemType ItemType => itemType;
+
+    public ItemTypeAmount()
+    {
+        this.itemType = ItemType.NONE;
+        this.amount = 0;
+    }
+    public ItemTypeAmount(ItemType itemType, int amount)
+    {
+        this.itemType = itemType;
+        this.amount = amount;
+    }
+
+    public ItemTypeAmount Clone()
+    {
+        var clone = new ItemTypeAmount();
+        clone.itemType = this.itemType;
+        clone.amount = this.amount;
+        return clone;
+    }
 }

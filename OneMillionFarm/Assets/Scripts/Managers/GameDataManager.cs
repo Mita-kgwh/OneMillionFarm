@@ -73,6 +73,21 @@ public class GameDataManager : MonoSingleton<GameDataManager>
         }
     }
 
+    private GameStorageItemDatas storageItemDatas;
+    public GameStorageItemDatas StorageItemDatas
+    {
+        get
+        {
+            if (storageItemDatas == null)
+            {
+                storageItemDatas = new GameStorageItemDatas();
+                storageItemDatas.Init();
+            }
+
+            return storageItemDatas;
+        }
+    }
+
     public override void Init()
     {
         StartCoroutine(LoadData());
@@ -94,11 +109,13 @@ public class GameDataManager : MonoSingleton<GameDataManager>
         farmTileDatas = new GameFarmTileDatas();
         creatureDatas = new GameCreatureDatas();
         coinData = new UserGameCoinData();
+        storageItemDatas = new GameStorageItemDatas();
 
 
         workerDatas.Init();
         farmTileDatas.Init();
         creatureDatas.Init();
         coinData.Init();      
+        storageItemDatas.Init();
     }
 }

@@ -29,3 +29,16 @@ public enum ItemType
 
     FARMTILE = 600,
 }
+
+public enum SlotType
+{
+    NONE = -1,
+    INVENTORY = 0,
+    TOOLBAR = 1,
+}
+
+public enum DialogType
+{
+    NONE = -1,
+    INVENTORY_DIALOG = 0,
+}

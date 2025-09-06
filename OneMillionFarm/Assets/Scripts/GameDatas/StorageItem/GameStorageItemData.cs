@@ -2,17 +2,59 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameStorageItemData : MonoBehaviour
+[System.Serializable]
+public class GameStorageItemData : BaseGameData
 {
-    // Start is called before the first frame update
-    void Start()
+    public int slotId;
+
+    public ItemTypeAmount typeAmount;
+
+    public ItemTypeAmount TypeAmount
+    {
+        get
+        {
+            if (typeAmount == null)
+            {
+                typeAmount = new ItemTypeAmount();
+            }
+            return typeAmount;
+        }
+    }
+
+    public int Amount
+    {
+        get
+        {
+            return TypeAmount.Amount;
+        }
+    }
+
+    public ItemType ItemType
+    {
+        get 
+        { 
+            return TypeAmount.ItemType; 
+        }
+    }
+
+    public int SlotID => this.slotId;
+
+    public GameStorageItemData() 
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    public GameStorageItemData(int slotId, ItemTypeAmount typeAmount)
     {
-        
+        this.slotId = slotId;
+        this.typeAmount = typeAmount;
+    }
+
+    public GameStorageItemData Clone() 
+    {  
+        var clone = new GameStorageItemData();
+        clone.typeAmount = TypeAmount.Clone();
+        clone.slotId = this.slotId;
+        return clone;
     }
 }
