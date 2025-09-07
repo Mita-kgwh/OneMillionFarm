@@ -38,6 +38,8 @@ public class GameStorageItemData : BaseGameData
     }
 
     public int SlotID => this.slotId;
+    public bool FreeSlot => this.ItemType == ItemType.NONE;
+    public bool CanUseOnFarmTile => ((int)this.ItemType / 100) == 1;
 
     public GameStorageItemData() 
     {
@@ -64,8 +66,15 @@ public class GameStorageItemData : BaseGameData
         return this;
     }
 
-    public void AddAmount(int amount) 
+    public GameStorageItemData SetStorageItem(ItemTypeAmount typeAmount)
+    {
+        this.typeAmount = typeAmount;
+        return this;
+    }
+
+    public GameStorageItemData AddAmount(int amount) 
     {
         TypeAmount.AddAmount(amount);
+        return this;
     }
 }

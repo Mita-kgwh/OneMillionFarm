@@ -17,6 +17,8 @@ public class GameCreatureDatas : BaseGameData
         }
     }
 
+    public static System.Action<ItemType, int> OnCollectProduct;
+
     public List<GameCreatureData> creatureDatas;
 
     public List<GameCreatureData> CreatureDatas
@@ -100,12 +102,15 @@ public class GameCreatureDatas : BaseGameData
         var data = GetCreatureDataByFarmId(farmId);
         if (data != null)
         {
+            var productAmount = data.CurrentProductAmount;
+            var creatureType = data.CreatureType;
             data.OnCollectProductDo();
             bool maxLifeTime = data.ReachMaxLifeTime;
             if (maxLifeTime)
             {
                 CreatureDatas.Remove(data);
             }
+            OnCollectProduct?.Invoke(creatureType, productAmount);
             SaveData();
             return maxLifeTime;
         }

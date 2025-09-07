@@ -100,15 +100,14 @@ public class GameDataManager : MonoSingleton<GameDataManager>
         if (false)
         {
             LoadUserData();
-            yield return new WaitForSeconds(0.2f);
-            OnOpenGame();
         }
         else
         {
             //Else Create New
             CreateNewData();
         }
-
+        yield return new WaitForSeconds(0.2f);
+        OnOpenGame();
         yield return new WaitForSeconds(0.5f);
         OnLoadDataDone?.Invoke();
     }

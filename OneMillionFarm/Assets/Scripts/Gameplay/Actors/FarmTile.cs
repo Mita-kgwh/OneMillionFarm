@@ -134,7 +134,7 @@ public class FarmTile : BaseObject
         bool useSuccess = GameStorageItemDatas.Instance.UseStorageItemData(slotItem.SlotIndex);
         if (useSuccess)
         {
-            var createData = GameCreatureDatas.Instance?.OnCreateACreature(ConvertItemCreature(slotItem.ItemType), this.objectID) ?? null;
+            var createData = GameCreatureDatas.Instance?.OnCreateACreature(GameUltis.ConvertTypeSeed2Creature(slotItem.ItemType), this.objectID) ?? null;
             var createObj = CreaturesManager.Instance.CreateCreatureItem(createData);
             if (createObj != null)
             {
@@ -144,10 +144,5 @@ public class FarmTile : BaseObject
             }        
         }
         OnInteractAction?.Invoke(slotItem.ItemType, useSuccess);
-
-        ItemType ConvertItemCreature(ItemType seedType)
-        {
-            return (ItemType)((int)seedType + 100); 
-        }
     }
 }

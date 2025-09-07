@@ -14,4 +14,16 @@ public static class GameUltis
     {
         return DateTime.FromFileTime(value);
     }
+
+    public static ItemType ConvertTypeSeed2Creature(ItemType seedType)
+    {
+        return (ItemType)((int)seedType + 100);
+    }
+    
+    public static ItemType ConvertTypeCreature2Product(ItemType creatureType)
+    {
+        return (ItemType)((int)creatureType + 100);
+    }
+
+
 }

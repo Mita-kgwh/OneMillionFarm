@@ -59,29 +59,77 @@ public class GameStorageItemDatas : BaseGameData
             return;
         }
         var startItemAmount = statsCf.ItemAmountClone();
+        var storageSize = statsCf.StorageSize;
+        for (int i = 0; i < storageSize; i++)
+        {
+            CreateStorageItemData(new ItemTypeAmount(), i);
+        }
         for (int i = 0; i < startItemAmount.Count; i++)
         {
-            AddStorageItemData(startItemAmount[i], i);
+            var slotData = GetGameStorageItemDataEmpty();
+            if (slotData != null)
+            {
+                slotData.SetStorageItem(startItemAmount[i]);
+            }
         }
+
+        SaveData();
     }
 
-    public bool AddStorageItemData(ItemTypeAmount typeAmount, int slotId)
+    public override void OpenGame()
     {
-        var itemData = GetGameStorageItemData(slotId);
-        if (itemData == null)
-        {
-            itemData = new GameStorageItemData(slotId, typeAmount);
-            storageItemDatas.Add(itemData);
-            dicFindStorageItem.TryAdd(slotId, itemData);
+        base.OpenGame();
+        UnassignCallback();
+        AssignCallback();
+    }
 
-            return true;
+    private void AssignCallback()
+    {
+        GameCreatureDatas.OnCollectProduct += OnCollectProductCallback;
+    }
+
+    private void UnassignCallback()
+    {
+        GameCreatureDatas.OnCollectProduct -= OnCollectProductCallback;
+    }
+
+    private void OnCollectProductCallback(ItemType creatureType, int amount)
+    {
+        var productType = GameUltis.ConvertTypeCreature2Product(creatureType);
+        var dataSlot = GetGameStorageItemDataByType(productType);
+        if (dataSlot != null)
+        {
+            dataSlot.AddAmount(amount);
         }
         else
         {
-            Debug.LogError("This slot has data already, check again");
+            //Has not have this item type yet
+            dataSlot = GetGameStorageItemDataEmpty();
+            if (dataSlot == null)
+            {
+                Debug.LogError("Bag Full");
+            }
+            else
+            {
+                dataSlot.SetStorageItem(new ItemTypeAmount(productType, amount));
+            }            
         }
+        OnStorageDataChange?.Invoke();
+        SaveData();
+    }
 
-        return false;
+    /// <summary>
+    /// Create add item data, remember to call save after
+    /// </summary>
+    /// <param name="typeAmount"></param>
+    /// <param name="slotId"></param>
+    /// <returns></returns>
+    private bool CreateStorageItemData(ItemTypeAmount typeAmount, int slotId)
+    {
+        var itemData = new GameStorageItemData(slotId, typeAmount);
+        storageItemDatas.Add(itemData);
+        dicFindStorageItem.TryAdd(slotId, itemData);
+        return true;
     }
 
     public bool UseStorageItemData(int slotId, int amount = 1)
@@ -90,19 +138,39 @@ public class GameStorageItemDatas : BaseGameData
         {
             return false;
         }
-        var itemData = GetGameStorageItemData(slotId);
+        var itemData = GetGameStorageItemDataBySlotId(slotId);
         if (itemData == null)
         {
             Debug.LogError("This slot data null, can not use");
             return false;
         }
-
+        if (!itemData.CanUseOnFarmTile)
+        {
+            Debug.LogError($"Invalid, can not use {itemData.ItemType} on farm tile.");
+            return false;
+        }
         itemData.AddAmount(-amount);
-
+        SaveData();
         return true;
     }
 
-    private GameStorageItemData GetGameStorageItemData(int slotId)
+    private GameStorageItemData GetGameStorageItemDataEmpty()
+    {
+        GameStorageItemData itemData = null;
+
+        for (int i = 0; i < storageItemDatas.Count; i++)
+        {
+            if (storageItemDatas[i].FreeSlot)
+            {
+                itemData = storageItemDatas[i];
+                break;
+            }
+        }
+
+        return itemData;
+    }
+
+    private GameStorageItemData GetGameStorageItemDataBySlotId(int slotId)
     {
         GameStorageItemData itemData = null;
         if (!dicFindStorageItem.TryGetValue(slotId, out itemData))
@@ -121,10 +189,25 @@ public class GameStorageItemDatas : BaseGameData
         return itemData;
     }
 
+    private GameStorageItemData GetGameStorageItemDataByType(ItemType itemType)
+    {
+        GameStorageItemData itemData = null;
+        for (int i = 0; i < storageItemDatas.Count; i++)
+        {
+            if (storageItemDatas[i].ItemType == itemType)
+            {
+                itemData = storageItemDatas[i];
+                break;
+            }
+        }
+
+        return itemData;
+    }
+
     public GameStorageItemData GetCloneGameStorageItemData(int slotId)
     {
         GameStorageItemData cloneItemData = null;
-        GameStorageItemData orgItemData = GetGameStorageItemData(slotId);
+        GameStorageItemData orgItemData = GetGameStorageItemDataBySlotId(slotId);
         if (orgItemData != null)
         {
             cloneItemData = orgItemData.Clone();
@@ -134,8 +217,8 @@ public class GameStorageItemDatas : BaseGameData
 
     public void SwitchStorageItemData(int slotID1, int slotID2)
     {
-        var data1 = GetGameStorageItemData(slotID1);
-        var data2 = GetGameStorageItemData(slotID2);
+        var data1 = GetGameStorageItemDataBySlotId(slotID1);
+        var data2 = GetGameStorageItemDataBySlotId(slotID2);
         dicFindStorageItem.Remove(slotID1);
         dicFindStorageItem.Remove(slotID2);
         if (data1 != null)
@@ -151,5 +234,6 @@ public class GameStorageItemDatas : BaseGameData
         }
 
         OnStorageDataChange?.Invoke();
+        SaveData();
     }
 }
