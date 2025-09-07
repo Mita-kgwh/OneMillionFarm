@@ -104,26 +104,31 @@ public class CreaturesManager : MonoSingleton<CreaturesManager>
             if (!freeQueue.TryDequeue(out neCreature))
             {
                 Debug.LogError($"Dequeue fail {creatureType}");
-                return neCreature;
+                CreateNew();
             }
             neCreature.gameObject.SetActive(true);
         }
         else
+        {
+            CreateNew();
+        }
+        //Add to active
+        AddCreature2ActivePool(neCreature);
+        return neCreature;
+
+        void CreateNew()
         {
             ///Creature new 
             neCreature = SpawnObjectManager.Instance.CreateCreature(creatureType);
             if (neCreature == null)
             {
                 Debug.LogError($"SpawnObjectManager create null creature {creatureType}");
-                return null;
+                return;
             }
             neCreature.transform.SetParent(creatureContainTf);
             neCreature.SetObjectID(startIdCounter);
             startIdCounter++;
         }
-        //Add to active
-        AddCreature2ActivePool(neCreature);
-        return neCreature;
     }
 
     public BaseCreatureItem GetCanCollectCreatureItem()

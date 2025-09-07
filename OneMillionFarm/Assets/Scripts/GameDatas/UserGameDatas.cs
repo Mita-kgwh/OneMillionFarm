@@ -52,19 +52,19 @@ public class UserGameDatas : BaseGameData
         }
     }
 
-    public UserGameCoinData coinData;
+    public UserGameStatsData gameStatsData;
 
-    public UserGameCoinData CoinData
+    public UserGameStatsData GameStatsData
     {
         get
         {
-            if (coinData == null)
+            if (gameStatsData == null)
             {
-                coinData = new UserGameCoinData();
-                coinData.Init();
+                gameStatsData = new UserGameStatsData();
+                gameStatsData.Init();
             }
 
-            return coinData;
+            return gameStatsData;
         }
     }
 
@@ -88,7 +88,7 @@ public class UserGameDatas : BaseGameData
         this.workerDatas = data.workerDatas;
         this.farmTileDatas = data.farmTileDatas;
         this.creatureDatas = data.creatureDatas;
-        this.coinData = data.coinData;
+        this.gameStatsData = data.gameStatsData;
         this.storageItemDatas = data.storageItemDatas;
     }
 
@@ -103,14 +103,14 @@ public class UserGameDatas : BaseGameData
         workerDatas = new GameWorkerDatas();
         farmTileDatas = new GameFarmTileDatas();
         creatureDatas = new GameCreatureDatas();
-        coinData = new UserGameCoinData();
+        gameStatsData = new UserGameStatsData();
         storageItemDatas = new GameStorageItemDatas();
 
 
         workerDatas.Init();
         farmTileDatas.Init();
         creatureDatas.Init();
-        coinData.Init();
+        gameStatsData.Init();
         storageItemDatas.Init();
     }
 
@@ -121,7 +121,7 @@ public class UserGameDatas : BaseGameData
         WorkerDatas.OpenGame();
         FarmTileDatas.OpenGame();
         CreatureDatas.OpenGame();
-        CoinData.OpenGame();
+        GameStatsData.OpenGame();
         StorageItemDatas.OpenGame();
     }
 }

@@ -50,7 +50,7 @@ public class WorkerManager : MonoSingleton<WorkerManager>
 
     public WorkerActor BuyWorker()
     {
-        var coinData = UserGameCoinData.Instance;
+        var coinData = UserGameStatsData.Instance;
         if (coinData == null)
         {
             return null;
@@ -60,7 +60,7 @@ public class WorkerManager : MonoSingleton<WorkerManager>
         {
             return null;
         }
-
+        coinData.UseCoin(CostBuyWorker);
         var newWorkerData = GameWorkerDatas.AddWorkerData();
 
         if (newWorkerData == null)

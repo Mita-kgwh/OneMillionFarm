@@ -11,20 +11,30 @@ public class GameStatsConfigs : ScriptableObject
         {
             return GameDataManager.Instance.StatsConfigs;
         }
-    }
-
-    public int StartWorkerAmount => this.startWorkerAmount;
-    public int StartFarmTileAmount => this.startFarmTileAmount;
-    public int MaxColumnFarmTile => this.maxColFarmTile;
-    public int StorageSize => this.storageSize;
+    }   
 
     public int startWorkerAmount = 1;
     public int startFarmTileAmount = 3;
     public int maxColFarmTile = 5;
-    public int startEquipmentLv = 1;
+    public int starterCoin = 0;
+    public int startEquipmentLv = 0;
+    //Decrease time cycle of creature by percent
+    public float equipmentBoost = 0.1f;
+    //60% Boost 
+    public int maxEquipmentLevel = 6;
+    public int costUpgradeEquipment = 500;
     public int storageSize = 21;
     [Header("Items Starter")]
     public List<ItemTypeAmount> itemAmounts = new List<ItemTypeAmount>();
+    public int StartWorkerAmount => this.startWorkerAmount;
+    public int StartFarmTileAmount => this.startFarmTileAmount;
+    public int MaxColumnFarmTile => this.maxColFarmTile;
+    public int StorageSize => this.storageSize;
+    public int StarterCoin => this.starterCoin;
+    public int StartEquipmentLv => this.startEquipmentLv;
+    public float EquipmentBoost => this.equipmentBoost;
+    public int MaxEquipmentLevel => this.maxEquipmentLevel;
+    public int CostUpgradeEquipment => this.costUpgradeEquipment;
 
     public List<ItemTypeAmount> ItemAmountClone()
     {

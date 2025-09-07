@@ -52,11 +52,11 @@ public class GameDataManager : MonoSingleton<GameDataManager>
         }
     }
 
-    public UserGameCoinData CoinData
+    public UserGameStatsData GameStatsData
     {
         get
         {
-            return UserGameDatas.CoinData;
+            return UserGameDatas.GameStatsData;
         }
     }
 

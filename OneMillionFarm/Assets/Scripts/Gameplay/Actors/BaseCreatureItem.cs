@@ -80,7 +80,7 @@ public class BaseCreatureItem : WorkableObject, IUpdateable
     public override void DoInteractAction()
     {
         base.DoInteractAction();
-        Debug.Log($"This is Creature {this.CreatureID}");
+        //Debug.Log($"This is Creature {this.CreatureID}");
         ///Collected
         CollectedProduct();
     }
@@ -88,7 +88,7 @@ public class BaseCreatureItem : WorkableObject, IUpdateable
     public override void WorkerDoInteractAction()
     {
         base.WorkerDoInteractAction();
-        Debug.LogError($"Worker collect product");
+        //Debug.LogError($"Worker collect product");
         DoInteractAction();
     }
 
@@ -136,8 +136,8 @@ public class BaseCreatureItem : WorkableObject, IUpdateable
             else
             {
                 this.timer = CreatureStatsConfig.CycleTimeBySec;
-                //TODO timer bonus
-                this.timer *= 1f;
+                float bonus = UserGameStatsData.Instance.EquipmentBoost;
+                this.timer *= (1f - bonus);
                 //Check in case offline
                 if (creatureData != null)
                 {
@@ -151,7 +151,7 @@ public class BaseCreatureItem : WorkableObject, IUpdateable
 
     protected virtual void OnEndCycleDo()
     {
-        Debug.LogError($"End Cycle {ObjectType}, FarmID: {farmID}");
+        //Debug.LogError($"End Cycle {ObjectType}, FarmID: {farmID}");
         bool rotton = GameCreatureDatas.Instance.OnACreatureEndCycleDo(farmID);
         OnCreatureEndCycle?.Invoke(this);
         if (rotton)
@@ -159,7 +159,7 @@ public class BaseCreatureItem : WorkableObject, IUpdateable
             Return2Pool();
             return;
         }
-        Debug.LogError($"End Cycle {ObjectType}_farm_{farmID}: Current Product {CurrentProductAmount}, Collected Product {CollectedProductAmount}");
+        //Debug.LogError($"End Cycle {ObjectType}_farm_{farmID}: Current Product {CurrentProductAmount}, Collected Product {CollectedProductAmount}");
         CheckTimer();
     }
 
@@ -174,7 +174,7 @@ public class BaseCreatureItem : WorkableObject, IUpdateable
                 Return2Pool();
                 return;
             }
-            Debug.LogError($"Collect {ObjectType}_farm_{farmID}: Current Product {CurrentProductAmount}, Collected Product {CollectedProductAmount}");
+            //Debug.LogError($"Collect {ObjectType}_farm_{farmID}: Current Product {CurrentProductAmount}, Collected Product {CollectedProductAmount}");
         }
     }
 

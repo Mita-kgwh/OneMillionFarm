@@ -102,7 +102,7 @@ public class FarmTileManager : MonoSingleton<FarmTileManager>
 
     public FarmTile BuyFarmTile()
     {
-        var coinData = UserGameCoinData.Instance;
+        var coinData = UserGameStatsData.Instance;
         if (coinData == null)
         {
             return null;

@@ -4,9 +4,9 @@ using UnityEditor;
 using UnityEngine;
 
 [System.Serializable]
-public class UserGameCoinData : BaseGameData
+public class UserGameStatsData : BaseGameData
 {
-    public static UserGameCoinData Instance
+    public static UserGameStatsData Instance
     {
         get
         {
@@ -14,27 +14,55 @@ public class UserGameCoinData : BaseGameData
             if (gameManager == null)
                 return null;
 
-            return gameManager.CoinData;
+            return gameManager.GameStatsData;
         }
     }
 
     public int currentCoin;
-    private string COIN_KEY = "GAME_COIN";
+    public int equipmentLv;
+    //private string COIN_KEY = "GAME_COIN";
     public static System.Action<int, int> OnCoinChange;
-    public int CurrentCoin => currentCoin;
+    public static System.Action<int> OnUpgradeEquipment;
+    public int CurrentCoin => this.currentCoin;
+    public int EquipmentLv => this.equipmentLv;
+    public float EquipmentBoost
+    {
+        get
+        {
+            return equipmentLv * GameStatsConfigs.EquipmentBoost;
+        }
+    }
 
+    private GameStatsConfigs gameStatsConfigs;
+    private GameStatsConfigs GameStatsConfigs
+    {
+        get
+        {
+            if (this.gameStatsConfigs == null)
+            {
+                this.gameStatsConfigs = GameDataManager.Instance.StatsConfigs;
+            }
+
+            return this.gameStatsConfigs;
+        }
+    }
     public override void Init()
     {
         base.Init();
-        AddCoin(0);
+        if (GameStatsConfigs != null)
+        {
+            AddCoin(this.gameStatsConfigs.StarterCoin);
+        }
     }
 
     public override void OpenGame()
     {
         base.OpenGame();
-        OnCoinChange?.Invoke(currentCoin, 0);
-    }
 
+        OnCoinChange?.Invoke(currentCoin, 0);
+        OnUpgradeEquipment?.Invoke(equipmentLv);
+    }
+    #region COin
     public bool IsCanUse(int amount)
     {
         return amount <= currentCoin;
@@ -57,11 +85,29 @@ public class UserGameCoinData : BaseGameData
         OnCoinChange?.Invoke(currentCoin, -amount);
         SaveData();
     }
+    #endregion
+
+    #region Equipment
+
+    public bool IsCanUpgradeEquipment()
+    {        
+        return IsCanUse(GameStatsConfigs.CostUpgradeEquipment);
+    }
+
+    public void UpgradeEquipment()
+    {
+        this.equipmentLv++;
+        Debug.LogError($"{equipmentLv}");
+        OnUpgradeEquipment?.Invoke(equipmentLv);
+        SaveData();
+    }
+
+    #endregion
 
     protected override void SaveData()
     {
         base.SaveData();
-        PlayerPrefs.SetInt(COIN_KEY, currentCoin);
+        //PlayerPrefs.SetInt(COIN_KEY, currentCoin);   
     }
 
 #if UNITY_EDITOR
