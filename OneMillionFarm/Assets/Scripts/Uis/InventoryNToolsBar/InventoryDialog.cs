@@ -50,4 +50,9 @@ public class InventoryDialog : BaseDialog
         
         slotItemLayout.ParseData(itemDatas);        
     }
+
+    public void Button_SellAllProduct()
+    {
+        GameStorageItemDatas.Instance.SellAllProduct();
+    }
 }

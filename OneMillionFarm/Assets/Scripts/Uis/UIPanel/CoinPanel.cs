@@ -20,7 +20,7 @@ public class CoinPanel : BaseStatsPanel
 
     private void OnCoinChangeCallback(int curCoin, int amountChange)
     {
-        this.tmpCoin.SetText($"{curCoin}");
+        this.tmpCoin.SetText($"Goal: {curCoin}/1M");
     }
 
     #endregion

@@ -41,6 +41,19 @@ public class GameStorageItemData : BaseGameData
     public bool FreeSlot => this.ItemType == ItemType.NONE;
     public bool CanUseOnFarmTile => ((int)this.ItemType / 100) == 1;
 
+    private TradingManager tradingMan;
+    private TradingManager TradingMan
+    {
+        get
+        {
+            if (tradingMan == null)
+            {
+                tradingMan = TradingManager.Instance;
+            }
+            return tradingMan;
+        }
+    }
+
     public GameStorageItemData() 
     {
         
@@ -66,9 +79,21 @@ public class GameStorageItemData : BaseGameData
         return this;
     }
 
-    public GameStorageItemData SetStorageItem(ItemTypeAmount typeAmount)
+    public GameStorageItemData SetStorageItem(ItemType _type, int _amount)
     {
-        this.typeAmount = typeAmount;
+        if (this.typeAmount == null)
+        {
+            this.typeAmount = new ItemTypeAmount(_type, _amount);
+            return this;
+        }
+
+        this.typeAmount.SetType(_type, _amount);
+        return this;
+    }
+
+    public GameStorageItemData SetStorageItem(ItemTypeAmount _typeAmount)
+    {
+        this.typeAmount = _typeAmount;
         return this;
     }
 
@@ -76,5 +101,13 @@ public class GameStorageItemData : BaseGameData
     {
         TypeAmount.AddAmount(amount);
         return this;
+    }
+
+    public void SellProduct()
+    {
+        if (TradingMan.DoTrading(ItemType, Amount))
+        {
+            TypeAmount.Clear();
+        }
     }
 }

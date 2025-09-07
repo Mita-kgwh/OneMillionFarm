@@ -19,6 +19,21 @@ public class GameStorageItemDatas : BaseGameData
 
     public static System.Action OnStorageDataChange;
 
+    public bool IsFull
+    {
+        get
+        {
+            for (int i = 0; i < storageItemDatas.Count; i++)
+            {
+                if (storageItemDatas[i].FreeSlot)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
+
     public List<GameStorageItemData> storageItemDatas;
 
     public List<GameStorageItemData> StorageItemDatas
@@ -73,13 +88,15 @@ public class GameStorageItemDatas : BaseGameData
     private void AssignCallback()
     {
         GameCreatureDatas.OnCollectProduct += OnCollectProductCallback;
+        TradingManager.OnTradingSuccess += OnTradingSuccessCallback;
     }
 
     private void UnassignCallback()
     {
         GameCreatureDatas.OnCollectProduct -= OnCollectProductCallback;
+        TradingManager.OnTradingSuccess -= OnTradingSuccessCallback;
     }
-
+    #region Callback
     private void OnCollectProductCallback(ItemType creatureType, int amount, int farmID)
     {
         var productType = GameUltis.ConvertTypeCreature2Product(creatureType);
@@ -98,13 +115,35 @@ public class GameStorageItemDatas : BaseGameData
             }
             else
             {
-                dataSlot.SetStorageItem(new ItemTypeAmount(productType, amount));
+                dataSlot.SetStorageItem(productType, amount);
             }            
         }
         OnStorageDataChange?.Invoke();
         SaveData();
     }
 
+    private void OnTradingSuccessCallback(bool _purchase, ItemType itemType, int amount)
+    {
+        //We have updated data and UI for save already
+        if (!_purchase)
+        {
+            return;
+        }
+
+        var slotData = GetGameStorageItemDataEmpty();
+        if (slotData == null)
+        {
+            return;
+        }
+        slotData.SetStorageItem(itemType, amount);
+
+        OnStorageDataChange?.Invoke();
+        SaveData();
+    }
+
+    #endregion
+
+    #region Data Operation
     /// <summary>
     /// Create add item data, remember to call save after
     /// </summary>
@@ -141,6 +180,55 @@ public class GameStorageItemDatas : BaseGameData
         SaveData();
         return true;
     }
+
+    public void SwitchStorageItemData(int slotID1, int slotID2)
+    {
+        var data1 = GetGameStorageItemDataBySlotId(slotID1);
+        var data2 = GetGameStorageItemDataBySlotId(slotID2);
+        dicFindStorageItem.Remove(slotID1);
+        dicFindStorageItem.Remove(slotID2);
+        if (data1 != null)
+        {
+            data1.SetSlotID(slotID2);
+            dicFindStorageItem.TryAdd(slotID2, data1);
+        }
+
+        if (data2 != null)
+        {
+            data2.SetSlotID(slotID1);
+            dicFindStorageItem.TryAdd(slotID1, data2);
+        }
+
+        OnStorageDataChange?.Invoke();
+        SaveData();
+    }
+
+    public void SellAllProduct()
+    {
+        int startId = (int)ItemType.PRODUCT_TOMATO;
+        int endId = (int)ItemType.PRODUCT_COW;
+        List<GameStorageItemData> rdDataItems = new List<GameStorageItemData>();
+        for (int i = startId; i < endId; i++)
+        {
+            var itemData = GetGameStorageItemDataByType((ItemType)i);
+            if (itemData != null)
+            {
+                rdDataItems.Add(itemData);
+                itemData.SellProduct();
+            }
+        }
+        if (rdDataItems.Count == 0)
+        {
+            return;
+        }
+
+        OnStorageDataChange?.Invoke();
+        SaveData();
+    }
+
+    #endregion
+
+    #region Get Data
 
     private GameStorageItemData GetGameStorageItemDataEmpty()
     {
@@ -214,25 +302,5 @@ public class GameStorageItemDatas : BaseGameData
         return itemData;
     }
 
-    public void SwitchStorageItemData(int slotID1, int slotID2)
-    {
-        var data1 = GetGameStorageItemDataBySlotId(slotID1);
-        var data2 = GetGameStorageItemDataBySlotId(slotID2);
-        dicFindStorageItem.Remove(slotID1);
-        dicFindStorageItem.Remove(slotID2);
-        if (data1 != null)
-        {            
-            data1.SetSlotID(slotID2);
-            dicFindStorageItem.TryAdd(slotID2, data1);
-        }
-
-        if (data2 != null)
-        {
-            data2.SetSlotID(slotID1);
-            dicFindStorageItem.TryAdd(slotID1, data2);
-        }
-
-        OnStorageDataChange?.Invoke();
-        SaveData();
-    }
+    #endregion
 }

@@ -77,13 +77,28 @@ public class ItemTypeAmount
         return clone;
     }
 
+    public ItemTypeAmount SetType(ItemType _itemType, int _amount = 1)
+    {
+        this.itemType = _itemType;
+        this.amount = _amount;
+        return this;
+    }
+
     public ItemTypeAmount AddAmount(int _amount)
     {
         this.amount += _amount;
         if (this.amount <= 0)
         {
-            this.amount = 0;
+            Clear();
         }
+
+        return this;
+    }
+
+    public ItemTypeAmount Clear()
+    {
+        this.amount = 0;
+        this.itemType = ItemType.NONE;
 
         return this;
     }
