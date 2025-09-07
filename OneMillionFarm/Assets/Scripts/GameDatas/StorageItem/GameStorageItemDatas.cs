@@ -83,6 +83,22 @@ public class GameStorageItemDatas : BaseGameData
         AssignCallback();
     }
 
+    private GameDataManager mainDataInstance;
+    protected override void SaveData()
+    {
+        base.SaveData();
+        if (mainDataInstance == null)
+        {
+            mainDataInstance = GameDataManager.Instance;
+        }
+        if (mainDataInstance == null)
+        {
+            Debug.LogError("Data Manager Null, can not save");
+            return;
+        }
+        mainDataInstance.SaveData();
+    }
+
     private void AssignCallback()
     {
         GameCreatureDatas.OnCollectProduct += OnCollectProductCallback;

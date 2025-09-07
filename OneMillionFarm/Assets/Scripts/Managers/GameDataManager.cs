@@ -1,90 +1,70 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class GameDataManager : MonoSingleton<GameDataManager>
 {
     [SerializeField] private GameStatsConfigs statsConfigs;
 
+    private string KeySaveGameDatas = "UserFarmGameDatas";
+
     public static System.Action OnLoadDataDone;
 
     public GameStatsConfigs StatsConfigs => statsConfigs;
 
-    private GameWorkerDatas workerDatas;
+    private UserGameDatas userGameDatas;
+
+    public UserGameDatas UserGameDatas
+    {
+        get
+        {
+            if (userGameDatas == null)
+            {
+                userGameDatas = new UserGameDatas();
+                userGameDatas.Init();
+            }
+
+            return userGameDatas;
+        }
+    }
 
     public GameWorkerDatas WorkerDatas
     {
         get 
-        { 
-            if (workerDatas == null)
-            {
-                workerDatas = new GameWorkerDatas();
-                workerDatas.Init();
-            }
-            return workerDatas; 
+        {
+            return UserGameDatas.WorkerDatas; 
         }
     }
-
-    private GameFarmTileDatas farmTileDatas;
 
     public GameFarmTileDatas FarmTileDatas
     {
         get
         {
-            if (farmTileDatas == null)
-            {
-                farmTileDatas = new GameFarmTileDatas();
-                farmTileDatas.Init();
-            }
-
-            return farmTileDatas;
+            return UserGameDatas.FarmTileDatas;
         }
     }
-
-    private GameCreatureDatas creatureDatas;
-
     public GameCreatureDatas CreatureDatas
     {
         get
         {
-            if(creatureDatas == null)
-            {
-                creatureDatas = new GameCreatureDatas();
-                creatureDatas.Init();
-            }
-
-            return creatureDatas;
+            return UserGameDatas.CreatureDatas;
         }
     }
-
-    private UserGameCoinData coinData;
 
     public UserGameCoinData CoinData
     {
         get
         {
-            if(coinData == null)
-            {
-                coinData = new UserGameCoinData();
-                coinData.Init();
-            }
-
-            return coinData;
+            return UserGameDatas.CoinData;
         }
     }
 
-    private GameStorageItemDatas storageItemDatas;
     public GameStorageItemDatas StorageItemDatas
     {
         get
         {
-            if (storageItemDatas == null)
-            {
-                storageItemDatas = new GameStorageItemDatas();
-                storageItemDatas.Init();
-            }
-
-            return storageItemDatas;
+            return UserGameDatas.StorageItemDatas;
         }
     }
 
@@ -95,50 +75,67 @@ public class GameDataManager : MonoSingleton<GameDataManager>
 
     private IEnumerator IE_LoadData()
     {
-        //TODO if have data
+        InitReference();
         //Load Data
-        if (false)
-        {
-            LoadUserData();
-        }
-        else
-        {
-            //Else Create New
-            CreateNewData();
-        }
+        LoadUserData();
+
         yield return new WaitForSeconds(0.2f);
         OnOpenGame();
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForEndOfFrame();
+        SaveData();
+        yield return new WaitForSeconds(0.3f);
         OnLoadDataDone?.Invoke();
+    }
+
+    private void InitReference()
+    {
+
     }
 
     private void CreateNewData()
     {
-        workerDatas = new GameWorkerDatas();
-        farmTileDatas = new GameFarmTileDatas();
-        creatureDatas = new GameCreatureDatas();
-        coinData = new UserGameCoinData();
-        storageItemDatas = new GameStorageItemDatas();
-
-
-        workerDatas.Init();
-        farmTileDatas.Init();
-        creatureDatas.Init();
-        coinData.Init();      
-        storageItemDatas.Init();
+        userGameDatas = new UserGameDatas();
+        userGameDatas.Init();
     }
 
     private void LoadUserData()
     {
-        //TODO
+        if (PlayerPrefs.HasKey(KeySaveGameDatas))
+        {
+            try
+            {
+                string saveStr = PlayerPrefs.GetString(this.KeySaveGameDatas);
+                userGameDatas = JsonUtility.FromJson<UserGameDatas>(saveStr);
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError("Get data error, create new data");
+                Debug.LogException(e);
+                CreateNewData();
+            }
+        }
+        else
+        {
+            Debug.LogError("Dont have data, new user, create new data");
+            CreateNewData();
+        }
+       
     }
 
     private void OnOpenGame()
     {
-        workerDatas.OpenGame();
-        farmTileDatas.OpenGame();
-        creatureDatas.OpenGame();
-        coinData.OpenGame();
-        storageItemDatas.OpenGame();
+        UserGameDatas.OpenGame();
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        SaveData();
+    }
+
+    public void SaveData()
+    {
+        string saveStr = JsonUtility.ToJson(UserGameDatas, true);
+        PlayerPrefs.SetString(KeySaveGameDatas, saveStr);
     }
 }

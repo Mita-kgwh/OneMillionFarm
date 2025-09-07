@@ -37,7 +37,7 @@ public class WorkerManager : MonoSingleton<WorkerManager>
         }
 
         var workerDatasClone = WorkerDatas.GetCloneWorkerDatas();
-        var offset = Vector3.zero;
+        var offset = Vector3.forward;
         for (int i = 0; i < workerDatasClone.Count; i++)
         {
             var worker = CreateWorker(workerDatasClone[i]);

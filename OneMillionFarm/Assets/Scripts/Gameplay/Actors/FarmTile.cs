@@ -135,13 +135,12 @@ public class FarmTile : BaseObject
         if (useSuccess)
         {
             var createData = GameCreatureDatas.Instance?.OnCreateACreature(GameUltis.ConvertTypeSeed2Creature(slotItem.ItemType), this.objectID) ?? null;
-            var createObj = CreaturesManager.Instance.CreateCreatureItem(createData);
-            if (createObj != null)
-            {
-                this.creatureItem = createObj;
-                this.creatureItem.transform.position = this.transform.position;
-                AssignCreatureItem(createObj);
-            }        
+            CreaturesManager.Instance.CreateCreatureItem(createData);
+            //if (createObj != null)
+            //{
+            //    this.creatureItem.transform.position = this.transform.position;
+            //    AssignCreatureItem(createObj);
+            //}        
         }
         OnInteractAction?.Invoke(slotItem.ItemType, useSuccess);
     }

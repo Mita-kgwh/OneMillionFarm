@@ -13,6 +13,7 @@ public class BaseCreatureItem : BaseObject, IUpdateable
 
     public static System.Action<BaseCreatureItem> OnReturn2Pool;
 
+    public int FarmID => this.farmID;
     protected virtual int CurrentProductAmount
     {
         get

@@ -27,7 +27,52 @@ public class FarmTileManager : MonoSingleton<FarmTileManager>
 
     private int costBuyFarmTile = 500;
     public static System.Action<FarmTile> OnBuyAFarmTile;
-    
+
+    public override void Init()
+    {
+        base.Init();
+        UnassignCallback();
+        AssignCallback();
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        UnassignCallback();
+    }
+
+    private void AssignCallback()
+    {
+        CreaturesManager.OnCreateACreature += OnCreateACreatureCallback;
+    }
+
+    private void UnassignCallback()
+    {
+        CreaturesManager.OnCreateACreature -= OnCreateACreatureCallback;
+    }
+
+    #region Callback
+
+    private void OnCreateACreatureCallback(BaseCreatureItem neCreature)
+    {
+        if (neCreature == null)
+        {
+            return;
+        }
+
+        var tile = GetFarmTileById(neCreature.FarmID);
+        if (tile == null)
+        {
+            //Debug.LogError($"Farm tile null {neCreature.FarmID} when assign creature");
+            return;
+        }
+
+        neCreature.transform.position = tile.transform.position;
+        tile.AssignCreatureItem(neCreature);
+    }
+
+    #endregion
+
     public void StartGame()
     {
         if (FarmTileDatas == null)
