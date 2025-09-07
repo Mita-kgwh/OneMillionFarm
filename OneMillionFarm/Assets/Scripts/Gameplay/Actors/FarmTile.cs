@@ -2,31 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FarmTile : BaseObject
+public class FarmTile : WorkableObject
 {
-    public int FarmID => this.objectID;
+    public int FarmID => this.ObjectID;
 
     public static System.Action<FarmTile> OnFarmTileFree;
-
-    //protected GameFarmTileData tileData;
-
-    //protected GameFarmTileData TileData
-    //{
-    //    get
-    //    {
-    //        if (this.tileData == null)
-    //        {
-
-    //        }
-
-    //        return this.tileData;
-    //    }
-    //}
-
-    /// <summary>
-    /// Worker which working on this tile
-    /// </summary>
-    private WorkerActor workerActor;
 
     /// <summary>
     /// Plant or Animal on Tile
@@ -48,12 +28,12 @@ public class FarmTile : BaseObject
 
     protected virtual void AssignCallback()
     {
-        BaseCreatureItem.OnReturn2Pool += OnReturn2PoolCallback;
+        BaseCreatureItem.OnCreatureReturn2Pool += OnReturn2PoolCallback;
     }
 
     protected virtual void UnassignCallback()
     {
-        BaseCreatureItem.OnReturn2Pool -= OnReturn2PoolCallback;
+        BaseCreatureItem.OnCreatureReturn2Pool -= OnReturn2PoolCallback;
     }
 
     protected virtual void OnReturn2PoolCallback(BaseCreatureItem creatureItem)
@@ -83,26 +63,6 @@ public class FarmTile : BaseObject
         return this;
     }
 
-    /// <summary>
-    /// Assign worker for farm tile. Call by Worker
-    /// </summary>
-    /// <param name="_worker"></param>
-    /// <returns></returns>
-    public FarmTile AssignWorker(WorkerActor _worker)
-    {
-        this.workerActor = _worker;
-        return this;
-    }
-
-    /// <summary>
-    /// Unassign worker. Call by Worker
-    /// </summary>
-    /// <returns></returns>
-    public FarmTile UnassignWorker()
-    {
-        this.workerActor = null;
-        return this;
-    }
 
     public FarmTile AssignCreatureItem(BaseCreatureItem creatureItem)
     {
@@ -119,7 +79,7 @@ public class FarmTile : BaseObject
     public override void DoInteractAction()
     {
         base.DoInteractAction();
-        Debug.Log($"This is Farm Tile {objectID}");
+        Debug.Log($"This is Farm Tile {FarmID}");
         if (!IsFree)
         {
             return;
@@ -131,17 +91,35 @@ public class FarmTile : BaseObject
             return;
         }
 
-        bool useSuccess = GameStorageItemDatas.Instance.UseStorageItemData(slotItem.SlotIndex);
+        UseStorageItem(slotItem.SlotIndex, slotItem.ItemType);
+    }
+
+    private void UseStorageItem(int slotIndex, ItemType itemType)
+    {
+        bool useSuccess = GameStorageItemDatas.Instance.UseStorageItemData(slotIndex);
         if (useSuccess)
         {
-            var createData = GameCreatureDatas.Instance?.OnCreateACreature(GameUltis.ConvertTypeSeed2Creature(slotItem.ItemType), this.objectID) ?? null;
+            var createData = GameCreatureDatas.Instance?.OnCreateACreature(GameUltis.ConvertTypeSeed2Creature(itemType), this.objectID) ?? null;
             CreaturesManager.Instance.CreateCreatureItem(createData);
-            //if (createObj != null)
-            //{
-            //    this.creatureItem.transform.position = this.transform.position;
-            //    AssignCreatureItem(createObj);
-            //}        
         }
-        OnInteractAction?.Invoke(slotItem.ItemType, useSuccess);
+        OnInteractAction?.Invoke(this, useSuccess);
+    }
+
+    public override void WorkerDoInteractAction()
+    {
+        base.WorkerDoInteractAction();
+        if (!IsFree)
+        {
+            return;
+        }
+
+        var slotData = GameStorageItemDatas.Instance.GetRandomUsableItemData();
+        if (slotData == null)
+        {
+            Debug.LogError("Have nothing can use in bag");
+            return;
+        }
+
+        UseStorageItem(slotData.SlotID, slotData.ItemType);
     }
 }

@@ -6,41 +6,41 @@ public class WorkerManager : MonoSingleton<WorkerManager>
 {
     public Transform workerContain;
     public List<WorkerActor> workerActors;
+    [SerializeField] private GameWorkersConfigs gameWorkersConfigs;
+    private GameWorkerDatas gameWorkerDatas;
 
-    private GameWorkerDatas workerDatas;
-
-    private GameWorkerDatas WorkerDatas
+    private GameWorkerDatas GameWorkerDatas
     {
         get
         {
-            if (workerDatas == null)
+            if (gameWorkerDatas == null)
             {
-                workerDatas = GameWorkerDatas.Instance;
+                gameWorkerDatas = GameWorkerDatas.Instance;
             }
 
-            return workerDatas;
+            return gameWorkerDatas;
         }
     }
 
     private Dictionary<int, WorkerActor> dicFindWorker = new Dictionary<int, WorkerActor>();
 
-    private int costBuyWorker = 500;
-    private float timeWorkerDoAction = 2f * 60f;
+    public int CostBuyWorker => this.gameWorkersConfigs?.CostBuyWorker ?? 500;
+    public float TimeWorkerDoAction => this.gameWorkersConfigs?.TimeWorkerDoAction ?? 120f;
     public static System.Action<WorkerActor> OnCreateAWorker;
 
     public void StartGame()
     {
-        if (WorkerDatas == null)
+        if (GameWorkerDatas == null)
         {
             Debug.LogError("Worker Datas Null, can not start game");
             return;
         }
 
-        var workerDatasClone = WorkerDatas.GetCloneWorkerDatas();
+        var workerDatas = GameWorkerDatas.WorkerDatas;
         var offset = Vector3.forward;
-        for (int i = 0; i < workerDatasClone.Count; i++)
+        for (int i = 0; i < workerDatas.Count; i++)
         {
-            var worker = CreateWorker(workerDatasClone[i]);
+            var worker = CreateWorker(workerDatas[i]);
             worker.transform.localPosition += offset;
             offset += Vector3.right * 1f;
         }
@@ -56,12 +56,12 @@ public class WorkerManager : MonoSingleton<WorkerManager>
             return null;
         }
 
-        if (!coinData.IsCanUse(costBuyWorker))
+        if (!coinData.IsCanUse(CostBuyWorker))
         {
             return null;
         }
 
-        var newWorkerData = WorkerDatas.AddWorkerData();
+        var newWorkerData = GameWorkerDatas.AddWorkerData();
 
         if (newWorkerData == null)
         {
@@ -102,7 +102,7 @@ public class WorkerManager : MonoSingleton<WorkerManager>
 
     public WorkerActor GetFreeWorker()
     {
-        var freeWorkerData = WorkerDatas.GetFreeWorkerData();
+        var freeWorkerData = GameWorkerDatas.GetFreeWorkerData();
         
         if (freeWorkerData == null)
         { 
@@ -120,7 +120,7 @@ public class WorkerManager : MonoSingleton<WorkerManager>
         {
             for (int i = 0; i < workerActors.Count; i++)
             {
-                if (workerActors[i].WorkerId == workerID)
+                if (workerActors[i].WorkerID == workerID)
                 {
                     targetWorker = workerActors[i];
                     dicFindWorker.TryAdd(workerID, workerActors[i]);

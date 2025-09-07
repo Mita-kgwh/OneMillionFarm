@@ -69,25 +69,11 @@ public class GameFarmTileDatas : BaseGameData
         int newId = farmTileDatas.Count;
         int row = newId / maxColumnFarmTile;
         int col = newId % maxColumnFarmTile;
-        newId = row * 1000 + col;
+        newId = (row + 1) * 1000 + col;
         GameFarmTileData farmTileData = new GameFarmTileData(newId);
 
         farmTileDatas.Add(farmTileData);
 
         return farmTileData;
     }
-
-    public GameFarmTileData GetFreeFarmTileData()
-    {
-        for (int i = 0; i < farmTileDatas.Count; i++)
-        {
-            if (farmTileDatas[i].IsFree)
-            {
-                return farmTileDatas[i];
-            }
-        }
-
-        return null;
-    }
-
 }

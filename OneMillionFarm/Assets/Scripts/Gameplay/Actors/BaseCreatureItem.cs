@@ -5,20 +5,27 @@ using UnityEngine;
 /// <summary>
 /// Plant or Animal on Plant Tile
 /// </summary>
-public class BaseCreatureItem : BaseObject, IUpdateable
+public class BaseCreatureItem : WorkableObject, IUpdateable
 {
     protected int farmID;
-    protected BaseCreatureBehaviour creatureBehaviour;
     public float timer = 10f;
-
-    public static System.Action<BaseCreatureItem> OnReturn2Pool;
+    public static System.Action<BaseCreatureItem> OnCreatureReturn2Pool;
+    public static System.Action<BaseCreatureItem> OnCreatureEndCycle;
+    public static System.Action<BaseCreatureItem> OnCreatureCollected;
 
     public int FarmID => this.farmID;
+    public bool CanCollectCreature
+    {
+        get
+        {
+            return CurrentProductAmount > 0;
+        }
+    }
     protected virtual int CurrentProductAmount
     {
         get
         {
-            if (CreatureData == null)
+            if (creatureData == null)
             {
                 return -1;
             }
@@ -30,7 +37,7 @@ public class BaseCreatureItem : BaseObject, IUpdateable
     {
         get
         {
-            if (CreatureData == null)
+            if (creatureData == null)
             {
                 return -1;
             }
@@ -40,18 +47,6 @@ public class BaseCreatureItem : BaseObject, IUpdateable
     }
 
     protected GameCreatureData creatureData;
-
-    protected GameCreatureData CreatureData
-    {
-        get 
-        {
-            if (creatureData == null)
-            {
-                //TODO
-            }
-            return creatureData; 
-        }
-    }
 
     protected CreatureStatsConfig creatureStatsConfig;
 
@@ -80,14 +75,21 @@ public class BaseCreatureItem : BaseObject, IUpdateable
         }
     }
 
-    public int CreatureID => this.objectID;
+    public int CreatureID => this.ObjectID;
 
     public override void DoInteractAction()
     {
         base.DoInteractAction();
-        Debug.Log($"This is Creature {this.objectID}");
+        Debug.Log($"This is Creature {this.CreatureID}");
         ///Collected
         CollectedProduct();
+    }
+
+    public override void WorkerDoInteractAction()
+    {
+        base.WorkerDoInteractAction();
+        Debug.LogError($"Worker collect product");
+        DoInteractAction();
     }
 
     private void OnDisable()
@@ -151,6 +153,7 @@ public class BaseCreatureItem : BaseObject, IUpdateable
     {
         Debug.LogError($"End Cycle {ObjectType}, FarmID: {farmID}");
         bool rotton = GameCreatureDatas.Instance.OnACreatureEndCycleDo(farmID);
+        OnCreatureEndCycle?.Invoke(this);
         if (rotton)
         {
             Return2Pool();
@@ -164,8 +167,9 @@ public class BaseCreatureItem : BaseObject, IUpdateable
     {
         if (this.CurrentProductAmount > 0)
         {
-            bool maxLifeTime = GameCreatureDatas.Instance.OnCollectACreatureProductDo(farmID);
-            if (maxLifeTime)
+            bool reachMaxLifeTime = GameCreatureDatas.Instance.OnCollectACreatureProductDo(farmID);
+            OnCreatureCollected?.Invoke(this);
+            if (reachMaxLifeTime)
             {
                 Return2Pool();
                 return;
@@ -179,6 +183,6 @@ public class BaseCreatureItem : BaseObject, IUpdateable
         CreaturesManager.Instance.Return2FreePool(this);
         this.gameObject.SetActive(false);
         this.creatureData = null;
-        OnReturn2Pool?.Invoke(this);
+        OnCreatureReturn2Pool?.Invoke(this);
     }
 }

@@ -153,15 +153,15 @@ public class FarmTileManager : MonoSingleton<FarmTileManager>
 
     public FarmTile GetFreeFarmTile()
     {
-        var freeWorkerData = FarmTileDatas.GetFreeFarmTileData();
-
-        if (freeWorkerData == null)
+        for (int i = 0; i < tiles.Count; i++)
         {
-
-            return null;
+            if (tiles[i].IsFree)
+            {
+                return tiles[i];
+            }
         }
 
-        return GetFarmTileById(freeWorkerData.FarmTileID);
+        return null;
     }
 
     public FarmTile GetFarmTileById(int farmTileID)

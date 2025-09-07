@@ -11,7 +11,7 @@ public class CreaturesManager : MonoSingleton<CreaturesManager>
     private Dictionary<ItemType, Queue<BaseCreatureItem>> freeCreaturePools = new Dictionary<ItemType, Queue<BaseCreatureItem>>();
 
     public static System.Action<BaseCreatureItem> OnCreateACreature;
-    private int startIdCounter = 5000;
+    private int startIdCounter = 1;
 
     private GameCreatureDatas creatureDatas;
 
@@ -88,7 +88,7 @@ public class CreaturesManager : MonoSingleton<CreaturesManager>
         return neCreature;
     }
 
-    public BaseCreatureItem GetFreeCreatureItem(ItemType creatureType)
+    private BaseCreatureItem GetFreeCreatureItem(ItemType creatureType)
     {
         if ((int)creatureType / 100 != 2)
         {
@@ -124,6 +124,21 @@ public class CreaturesManager : MonoSingleton<CreaturesManager>
         //Add to active
         AddCreature2ActivePool(neCreature);
         return neCreature;
+    }
+
+    public BaseCreatureItem GetCanCollectCreatureItem()
+    {
+        foreach (var subActiveDic in activeCreaturePools.Values)
+        {
+            foreach (var creature in subActiveDic.Values)
+            {
+                if (creature.CanCollectCreature)
+                {
+                    return creature;
+                }
+            }
+        }
+        return null;
     }
 
     /// <summary>

@@ -35,19 +35,6 @@ public class GameStorageItemDatas : BaseGameData
 
     private Dictionary<int, GameStorageItemData> dicFindStorageItem = new Dictionary<int, GameStorageItemData>();
 
-    public List<GameStorageItemData> GetCloneStorageItemDatas()
-    {
-        var results = new List<GameStorageItemData>();
-        if (StorageItemDatas == null)
-            return results;
-
-        for (int i = 0; i < storageItemDatas.Count; i++)
-        {
-            results.Add(storageItemDatas[i].Clone());
-        }
-        return results;
-    }
-
     public override void Init()
     {
         base.Init();
@@ -109,7 +96,7 @@ public class GameStorageItemDatas : BaseGameData
         GameCreatureDatas.OnCollectProduct -= OnCollectProductCallback;
     }
 
-    private void OnCollectProductCallback(ItemType creatureType, int amount)
+    private void OnCollectProductCallback(ItemType creatureType, int amount, int farmID)
     {
         var productType = GameUltis.ConvertTypeCreature2Product(creatureType);
         var dataSlot = GetGameStorageItemDataByType(productType);
@@ -166,6 +153,7 @@ public class GameStorageItemDatas : BaseGameData
             return false;
         }
         itemData.AddAmount(-amount);
+        OnStorageDataChange?.Invoke();
         SaveData();
         return true;
     }
@@ -186,7 +174,7 @@ public class GameStorageItemDatas : BaseGameData
         return itemData;
     }
 
-    private GameStorageItemData GetGameStorageItemDataBySlotId(int slotId)
+    public GameStorageItemData GetGameStorageItemDataBySlotId(int slotId)
     {
         GameStorageItemData itemData = null;
         if (!dicFindStorageItem.TryGetValue(slotId, out itemData))
@@ -205,6 +193,28 @@ public class GameStorageItemDatas : BaseGameData
         return itemData;
     }
 
+    public GameStorageItemData GetRandomUsableItemData()
+    {
+        int startId = (int)ItemType.SEED_TOMATO;
+        //TODO TEST
+        int endId = (int)ItemType.SEED_BLUE_BERRY;
+        List<GameStorageItemData> rdDataItems = new List<GameStorageItemData>();
+        for (int i = startId; i < endId; i++)
+        {
+            var itemData = GetGameStorageItemDataByType((ItemType)i);
+            if (itemData != null)
+            {
+                rdDataItems.Add(itemData);
+            }
+        }
+        if (rdDataItems.Count == 0)
+        {
+            return null;
+        }
+        
+        return rdDataItems[Random.Range(0, rdDataItems.Count)];
+    }
+
     private GameStorageItemData GetGameStorageItemDataByType(ItemType itemType)
     {
         GameStorageItemData itemData = null;
@@ -218,17 +228,6 @@ public class GameStorageItemDatas : BaseGameData
         }
 
         return itemData;
-    }
-
-    public GameStorageItemData GetCloneGameStorageItemData(int slotId)
-    {
-        GameStorageItemData cloneItemData = null;
-        GameStorageItemData orgItemData = GetGameStorageItemDataBySlotId(slotId);
-        if (orgItemData != null)
-        {
-            cloneItemData = orgItemData.Clone();
-        }
-        return cloneItemData;
     }
 
     public void SwitchStorageItemData(int slotID1, int slotID2)

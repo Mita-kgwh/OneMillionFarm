@@ -24,8 +24,6 @@ public class ToolBar : MonoBehaviour
         BaseDialog.OnShowDialog += OnShowDialogCallback;
         BaseDialog.OnHideDialog += OnHideDialogCallback;
 
-        BaseObject.OnInteractAction += OnInteractAction;
-
         GameStorageItemDatas.OnStorageDataChange += OnStorageDataChangeCallback;
     }
 
@@ -35,8 +33,6 @@ public class ToolBar : MonoBehaviour
 
         BaseDialog.OnShowDialog -= OnShowDialogCallback;
         BaseDialog.OnHideDialog -= OnHideDialogCallback;
-
-        BaseObject.OnInteractAction -= OnInteractAction;
 
         GameStorageItemDatas.OnStorageDataChange -= OnStorageDataChangeCallback;
     }
@@ -68,14 +64,6 @@ public class ToolBar : MonoBehaviour
         }
         ParseData();
         ShowToolBar(true);
-    }
-
-    private void OnInteractAction(ItemType itemType, bool _success)
-    {
-        if (_success)
-        {
-            ParseData();
-        }
     }
 
     private void OnStorageDataChangeCallback()
@@ -119,7 +107,7 @@ public class ToolBar : MonoBehaviour
         var amount = slotItemLayout.InitSlotCount;
         for (int i = 0; i < amount; i++)
         {
-            var data = datas.GetCloneGameStorageItemData(i);
+            var data = datas.GetGameStorageItemDataBySlotId(i);
             if (data == null)
             {
                 continue;

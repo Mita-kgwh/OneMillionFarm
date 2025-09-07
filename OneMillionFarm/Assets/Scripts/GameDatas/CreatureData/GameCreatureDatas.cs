@@ -17,7 +17,7 @@ public class GameCreatureDatas : BaseGameData
         }
     }
 
-    public static System.Action<ItemType, int> OnCollectProduct;
+    public static System.Action<ItemType, int, int> OnCollectProduct;
 
     public List<GameCreatureData> creatureDatas;
 
@@ -148,7 +148,7 @@ public class GameCreatureDatas : BaseGameData
             {
                 CreatureDatas.Remove(data);
             }
-            OnCollectProduct?.Invoke(creatureType, productAmount);
+            OnCollectProduct?.Invoke(creatureType, productAmount, farmId);
             SaveData();
             return maxLifeTime;
         }

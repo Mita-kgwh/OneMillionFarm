@@ -14,7 +14,7 @@ public class InventoryDialog : BaseDialog
             return null;
         if (dialog is InventoryDialog inventoryDialog)
         {
-            var itemDatas = GameStorageItemDatas.Instance.GetCloneStorageItemDatas();
+            var itemDatas = GameStorageItemDatas.Instance.StorageItemDatas;
             inventoryDialog.ParseData(itemDatas);
             inventoryDialog.ShowDialog();
 

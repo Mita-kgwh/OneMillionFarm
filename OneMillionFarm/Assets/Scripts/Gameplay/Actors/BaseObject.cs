@@ -9,7 +9,11 @@ public class BaseObject : MonoBehaviour
     [SerializeField] protected ItemType objectType;
     public ItemType ObjectType => objectType;
 
-    public static System.Action<ItemType, bool> OnInteractAction;
+    public int ObjectID => this.objectID;
+
+    protected BaseCreatureBehaviour creatureBehaviour;
+
+    public static System.Action<BaseObject, bool> OnInteractAction;
 
     public virtual void DoInteractAction()
     {
