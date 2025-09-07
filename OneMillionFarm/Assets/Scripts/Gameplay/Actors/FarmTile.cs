@@ -8,6 +8,21 @@ public class FarmTile : BaseObject
 
     public static System.Action<FarmTile> OnFarmTileFree;
 
+    //protected GameFarmTileData tileData;
+
+    //protected GameFarmTileData TileData
+    //{
+    //    get
+    //    {
+    //        if (this.tileData == null)
+    //        {
+
+    //        }
+
+    //        return this.tileData;
+    //    }
+    //}
+
     /// <summary>
     /// Worker which working on this tile
     /// </summary>
@@ -20,14 +35,51 @@ public class FarmTile : BaseObject
 
     public bool IsFree => creatureItem == null;
 
+    private void Awake()
+    {
+        UnassignCallback();
+        AssignCallback();
+    }
+
+    private void OnDestroy()
+    {
+        UnassignCallback();
+    }
+
+    protected virtual void AssignCallback()
+    {
+        BaseCreatureItem.OnReturn2Pool += OnReturn2PoolCallback;
+    }
+
+    protected virtual void UnassignCallback()
+    {
+        BaseCreatureItem.OnReturn2Pool -= OnReturn2PoolCallback;
+    }
+
+    protected virtual void OnReturn2PoolCallback(BaseCreatureItem creatureItem)
+    {
+        if (this.creatureItem == null)
+        {
+            return;
+        }
+        if (this.creatureItem.CreatureID != creatureItem.CreatureID)
+        {
+            return;
+        }
+        UnassignCreatureItem();
+    }
+
     /// <summary>
     /// Parse worker id when create worker
     /// </summary>
     /// <param name="_farmID"></param>
     /// <returns></returns>
-    public FarmTile SetUpFarmTile(int _farmID)
+    public FarmTile SetUpFarmTile(GameFarmTileData _tileData)
     {
-        this.objectID = _farmID;
+        //this.tileData = _tileData;
+        //if (this.tileData == null)
+        //    return this;
+        this.objectID = _tileData.FarmTileID;
         return this;
     }
 
@@ -68,6 +120,11 @@ public class FarmTile : BaseObject
     {
         base.DoInteractAction();
         Debug.Log($"This is Farm Tile {objectID}");
+        if (!IsFree)
+        {
+            return;
+        }
+
         var slotItem = SlotsClickManager.Instance.CurrentSlotItemUI;
         if (slotItem == null)
         {
@@ -77,13 +134,13 @@ public class FarmTile : BaseObject
         bool useSuccess = GameStorageItemDatas.Instance.UseStorageItemData(slotItem.SlotIndex);
         if (useSuccess)
         {
-            var createData = new GameCreatureData(ConvertItemCreature(slotItem.ItemType), this.objectID);
-            createData.SetStartTime(GameUltis.GetLocalLongTime());
+            var createData = GameCreatureDatas.Instance?.OnCreateACreature(ConvertItemCreature(slotItem.ItemType), this.objectID) ?? null;
             var createObj = CreaturesManager.Instance.CreateCreatureItem(createData);
             if (createObj != null)
             {
                 this.creatureItem = createObj;
                 this.creatureItem.transform.position = this.transform.position;
+                AssignCreatureItem(createObj);
             }        
         }
         OnInteractAction?.Invoke(slotItem.ItemType, useSuccess);

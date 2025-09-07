@@ -96,7 +96,7 @@ public class FarmTileManager : MonoSingleton<FarmTileManager>
             Debug.LogError("SpawnObjectManager spawn null FarmTile");
             return null;
         }
-        neFarmTile.SetUpFarmTile(tileData.FarmTileID);
+        neFarmTile.SetUpFarmTile(tileData);
         neFarmTile.transform.SetParent(gridContainTf);
         neFarmTile.gameObject.name = $"Tile_{tileData.FarmTileID}";
 

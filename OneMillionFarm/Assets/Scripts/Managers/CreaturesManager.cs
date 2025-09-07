@@ -32,6 +32,14 @@ public class CreaturesManager : MonoSingleton<CreaturesManager>
     public override void Init()
     {
         base.Init();
+        UnassignCallback();
+        AssignCallback();
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        UnassignCallback();
     }
 
     private void AssignCallback()
@@ -75,7 +83,7 @@ public class CreaturesManager : MonoSingleton<CreaturesManager>
             return null;
         }
 
-        neCreature.StartTimer();
+        neCreature.InitData(creatureData);
         OnCreateACreature?.Invoke(neCreature);
         return neCreature;
     }
@@ -98,6 +106,7 @@ public class CreaturesManager : MonoSingleton<CreaturesManager>
                 Debug.LogError($"Dequeue fail {creatureType}");
                 return neCreature;
             }
+            neCreature.gameObject.SetActive(true);
         }
         else
         {
@@ -117,6 +126,10 @@ public class CreaturesManager : MonoSingleton<CreaturesManager>
         return neCreature;
     }
 
+    /// <summary>
+    /// Call when Create new obj or Get Obj in Free Pool(Have dequeued in free pool)
+    /// </summary>
+    /// <param name="creatureItem"></param>
     private void AddCreature2ActivePool(BaseCreatureItem creatureItem)
     {
         if (creatureItem == null)
@@ -124,6 +137,8 @@ public class CreaturesManager : MonoSingleton<CreaturesManager>
             Debug.LogError("Can not add null creature to active pool");
             return;
         }
+
+        //Add to active dic
         Dictionary<int, BaseCreatureItem> activeDic;
         if (!activeCreaturePools.TryGetValue(creatureItem.ObjectType, out activeDic))
         {
@@ -142,9 +157,42 @@ public class CreaturesManager : MonoSingleton<CreaturesManager>
         }
     }
 
-    public void Return2Pool(BaseCreatureItem item)
+    public void Return2FreePool(BaseCreatureItem creatureItem)
     {
+        if (creatureItem == null)
+        {
+            Debug.LogError("Can not remove null creature in active pool");
+            return;
+        }
 
+        var creatureType = creatureItem.ObjectType;
+
+        //Remove from active dic
+        Dictionary<int, BaseCreatureItem> activeDic;
+        if (!activeCreaturePools.TryGetValue(creatureType, out activeDic))
+        {
+            //This type doesnt have dic active
+            Debug.LogError($"this {creatureType} does not have dic active pool");
+            return;
+        }
+
+        activeDic.Remove(creatureItem.CreatureID);
+
+        //Add to free pool queue
+        if (freeCreaturePools.TryGetValue(creatureType, out var freeQueue))
+        {
+            freeQueue.Enqueue(creatureItem);            
+        }
+        else //It have no queue
+        {
+            Debug.LogError($"This {creatureType} has no queue, create one");
+            Queue<BaseCreatureItem> freeCreatureQueue = new Queue<BaseCreatureItem>();
+            freeCreatureQueue.Enqueue(creatureItem);
+            if (!freeCreaturePools.TryAdd(creatureType, freeCreatureQueue))
+            {
+                Debug.LogError($"Add queue {creatureType} fail, check again");
+            }
+        }
     }
 
 

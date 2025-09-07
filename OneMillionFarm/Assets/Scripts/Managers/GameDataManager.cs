@@ -90,15 +90,25 @@ public class GameDataManager : MonoSingleton<GameDataManager>
 
     public override void Init()
     {
-        StartCoroutine(LoadData());
+        StartCoroutine(IE_LoadData());
     }
 
-    private IEnumerator LoadData()
+    private IEnumerator IE_LoadData()
     {
         //TODO if have data
         //Load Data
-        //Else Create New
-        CreateNewData();
+        if (false)
+        {
+            LoadUserData();
+            yield return new WaitForSeconds(0.2f);
+            OnOpenGame();
+        }
+        else
+        {
+            //Else Create New
+            CreateNewData();
+        }
+
         yield return new WaitForSeconds(0.5f);
         OnLoadDataDone?.Invoke();
     }
@@ -117,5 +127,19 @@ public class GameDataManager : MonoSingleton<GameDataManager>
         creatureDatas.Init();
         coinData.Init();      
         storageItemDatas.Init();
+    }
+
+    private void LoadUserData()
+    {
+        //TODO
+    }
+
+    private void OnOpenGame()
+    {
+        workerDatas.OpenGame();
+        farmTileDatas.OpenGame();
+        creatureDatas.OpenGame();
+        coinData.OpenGame();
+        storageItemDatas.OpenGame();
     }
 }
