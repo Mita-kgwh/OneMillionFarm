@@ -130,12 +130,22 @@ public class GameStorageItemDatas : BaseGameData
             return;
         }
 
-        var slotData = GetGameStorageItemDataEmpty();
-        if (slotData == null)
+        var slotData = GetGameStorageItemDataByType(itemType);
+        if (slotData != null)
         {
-            return;
+            slotData.AddAmount(amount);
         }
-        slotData.SetStorageItem(itemType, amount);
+        else
+        {
+            slotData = GetGameStorageItemDataEmpty();
+            if (slotData != null)
+            {
+                slotData.SetStorageItem(itemType, amount);
+            }
+        }
+        
+        if (slotData == null)
+            return;        
 
         OnStorageDataChange?.Invoke();
         SaveData();

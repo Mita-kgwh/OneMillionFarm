@@ -47,21 +47,21 @@ public class ToolBar : MonoBehaviour
 
     private void OnShowDialogCallback(BaseDialog dialog)
     {
-        DialogType dialogType = dialog?.DialogType ?? DialogType.NONE;
-        if (dialogType != DialogType.INVENTORY_DIALOG)
-        {
-            return;
-        }
+        //DialogType dialogType = dialog?.DialogType ?? DialogType.NONE;
+        //if (dialogType != DialogType.INVENTORY_DIALOG)
+        //{
+        //    return;
+        //}
         ShowToolBar(false);
     }
 
     private void OnHideDialogCallback(BaseDialog dialog)
     {
-        DialogType dialogType = dialog?.DialogType ?? DialogType.NONE;
-        if (dialogType != DialogType.INVENTORY_DIALOG)
-        {
-            return;
-        }
+        //DialogType dialogType = dialog?.DialogType ?? DialogType.NONE;
+        //if (dialogType != DialogType.INVENTORY_DIALOG)
+        //{
+        //    return;
+        //}
         ParseData();
         ShowToolBar(true);
     }

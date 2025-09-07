@@ -40,18 +40,33 @@ public class StoreDialog : BaseDialog
 
     public void ParseConfig()
     {
-        if (inited)
-        {
-            return;
-        }
-
         if (ItemConfigs == null)
         {
             return;
         }
+
+        if (!inited)
+        {
+            InitUI();
+        }
+
+        for (int i = 0; i < storeItems.Count; i++)
+        {
+            storeItems[i].CheckPurchase();
+        }                
+    }
+
+    private void InitUI()
+    {
         var itemCfs = storeItemConfigs.ItemConfigs;
+        int counterItem = 0;
         for (int i = 0; i < itemCfs.Count; i++)
         {
+            if ((int)itemCfs[i].TypeItem / 100 != 1)
+            {
+                continue;
+            }
+            counterItem++;
             StoreItem item = null;
             if (i >= storeItems.Count)
             {
@@ -66,9 +81,11 @@ public class StoreDialog : BaseDialog
             item.InitConfig(itemCfs[i]);
         }
 
-        for (int i = itemCfs.Count; i < storeItems.Count; i++)
+        for (int i = counterItem; i < storeItems.Count; i++)
         {
             storeItems[i].gameObject.SetActive(false);
         }
+
+        inited = true;
     }
 }

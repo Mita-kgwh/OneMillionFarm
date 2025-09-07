@@ -5,12 +5,11 @@ using UnityEngine.UI;
 
 public class StoreItem : MonoBehaviour
 {
-    [SerializeField] protected ItemType type;
     [SerializeField] protected Button purchaseBtn;
+    [SerializeField] protected Image imgIcon;
     public TMPro.TextMeshProUGUI tmpName;
     public TMPro.TextMeshProUGUI tmpPrice;
     public TMPro.TextMeshProUGUI tmpPurchaseAmount;
-    public TMPro.TextMeshProUGUI tmpSellValue;
     private StoreItemConfig itemConfig;
 
     private void OnEnable()
@@ -39,6 +38,10 @@ public class StoreItem : MonoBehaviour
         this.tmpPrice.color = canBuy ? Color.green : Color.red;
         this.purchaseBtn.interactable = canBuy;
     }
+    public void CheckPurchase()
+    {
+        OnCoinChangeCallback(0, 0);
+    }
 
     public void InitConfig(StoreItemConfig _itemConfig)
     {
@@ -57,7 +60,7 @@ public class StoreItem : MonoBehaviour
     {
         if (itemConfig == null)
         {
-            Debug.LogError($"{type} Item Config null");
+            Debug.LogError($"Item Config null");
             return;
         }
 

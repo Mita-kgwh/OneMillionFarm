@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54b1bc47b37514643a1d94b3e3674414, type: 3}
+  m_Name: StoreItemConfigs
+  m_EditorClassIdentifier: 
+  storeItemConfigs:
+  - itemType: 300
+    nameItem: TOMATO
+    tradingValue: 5
+    tradingAmount: 1
+  - itemType: 301
+    nameItem: BLUE BERRY
+    tradingValue: 8
+    tradingAmount: 1
+  - itemType: 302
+    nameItem: STRAW BERRY
+    tradingValue: 10
+    tradingAmount: 1
+  - itemType: 303
+    nameItem: MILK
+    tradingValue: 15
+    tradingAmount: 1
+  - itemType: 100
+    nameItem: TOMATO SEED
+    tradingValue: 30
+    tradingAmount: 1
+  - itemType: 101
+    nameItem: BLUE BERRY SEED
+    tradingValue: 50
+    tradingAmount: 1
+  - itemType: 102
+    nameItem: STRAW BERRY SEED
+    tradingValue: 400
+    tradingAmount: 10
+  - itemType: 103
+    nameItem: COW
+    tradingValue: 100
+    tradingAmount: 1
