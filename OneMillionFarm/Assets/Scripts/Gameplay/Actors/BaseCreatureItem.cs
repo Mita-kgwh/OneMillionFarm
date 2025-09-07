@@ -90,13 +90,6 @@ public class BaseCreatureItem : BaseObject, IUpdateable
         CollectedProduct();
     }
 
-    private void OnEnable()
-    {
-        //Prevent it call update when timer has not set yet 
-        this.timer = 10f;
-        UpdateManager.Instance.RegisterUpdateableObject(this);
-    }
-
     private void OnDisable()
     {
         if (UpdateManager.Instance != null)
@@ -124,6 +117,8 @@ public class BaseCreatureItem : BaseObject, IUpdateable
         }
         this.farmID = data.FarmID;
         CheckTimer();
+        UpdateManager.Instance.UnregisterUpdateableObject(this);
+        UpdateManager.Instance.RegisterUpdateableObject(this);
     }
 
     protected virtual void CheckTimer()
@@ -139,6 +134,15 @@ public class BaseCreatureItem : BaseObject, IUpdateable
             else
             {
                 this.timer = CreatureStatsConfig.CycleTimeBySec;
+                //TODO timer bonus
+                this.timer *= 1f;
+                //Check in case offline
+                if (creatureData != null)
+                {
+                    var timeDataPass = this.creatureData.GetTimePassSinceStartTime();
+                    //Debug.LogError($"Time Data Pass {timeDataPass}");
+                    this.timer -= timeDataPass;
+                }
             }
         }       
     }

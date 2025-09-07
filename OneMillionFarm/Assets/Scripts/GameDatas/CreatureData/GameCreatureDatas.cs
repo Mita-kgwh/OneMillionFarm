@@ -57,7 +57,28 @@ public class GameCreatureDatas : BaseGameData
     {
         base.OpenGame();
         //TODO Calculate offline
+        if (creatureDatas == null)
+        {
+            Debug.LogError("Creature data null");
+            creatureDatas = new List<GameCreatureData>();
+        }
 
+
+        //bool workerSolo = GameWorkerDatas.Instance.
+
+        var removeLst = new List<GameCreatureData>();
+        for (int i = 0; i < creatureDatas.Count; i++)
+        {
+            if (creatureDatas[i].CalculateOffline())
+            {
+                removeLst.Add(creatureDatas[i]);
+            }
+        }
+
+        for (int i = 0; i < removeLst.Count; i++)
+        {
+            creatureDatas.Remove(removeLst[i]);
+        }
     }
 
     private GameDataManager mainDataInstance;

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,7 +13,7 @@ public class GameCreatureData : BaseGameData
     /// <summary>
     /// Time start plant/raise
     /// </summary>
-    public float startTime;
+    public long startTime;
     ///Use both of this to check after offline
     /// <summary>
     /// amount of product this creature having now
@@ -79,7 +80,54 @@ public class GameCreatureData : BaseGameData
     public GameCreatureData SetStartTime()
     {
         this.startTime = GameUltis.GetLocalLongTime();
+        //Debug.LogError(DateTime.Now);
         return this;
+    }
+
+    /// <summary>
+    /// Return true if it has rotton, false if not
+    /// </summary>
+    /// <returns></returns>
+    public bool CalculateOffline()
+    {
+        //Debug.LogError("Start Cal Offline");
+        float rottenLimitTime = CreatureStatsConfigs.Instance?.TimeCreatureRottenBySec ?? 3600f;
+        float timeOffline = GameUltis.GetTimePassSinceTimeLongValue(this.startTime);
+        //Max Product when Close game
+        if (ReachMaxLifeTime)
+        {
+            return timeOffline >= rottenLimitTime;
+        }
+
+        //If not max, Calculate product offline
+        //total cycle when close game
+        int totalLifeCycle = this.currentProductAmount + this.collectedProductAmount;
+        int limitCycleLifeCount = CreatureStatsConfig.CycleLifeCount;
+        int lifeCycleLeft = limitCycleLifeCount - totalLifeCycle;
+        //TODO Get bonus
+        float cycleTime = CreatureStatsConfig.CycleTimeBySec * 1f;
+        int cycleOfflineCount = Mathf.FloorToInt(timeOffline / cycleTime);
+        
+        //Check with limit to get real cycle
+        cycleOfflineCount = lifeCycleLeft >= cycleOfflineCount ? cycleOfflineCount : lifeCycleLeft;
+        //Add product offline
+        this.currentProductAmount += cycleOfflineCount;
+        //Update new start time after {cycleOfflineCount} Cycle
+        int totalSecByCycleOffline = Mathf.RoundToInt(cycleOfflineCount * cycleTime);
+        this.startTime = GameUltis.AddTimeSecond2DateTime(this.startTime, totalSecByCycleOffline);
+        timeOffline -= totalSecByCycleOffline;
+        //Check Max Product after calculate profit offline
+        if (ReachMaxLifeTime)
+        {
+            return timeOffline >= rottenLimitTime;
+        }      
+
+        return false;
+    }
+
+    public float GetTimePassSinceStartTime()
+    {
+        return GameUltis.GetTimePassSinceTimeLongValue(this.startTime);
     }
 
     /// <summary>
@@ -93,7 +141,7 @@ public class GameCreatureData : BaseGameData
         {
             //Check if rotten
             float rottenLimitTime = CreatureStatsConfigs.Instance?.TimeCreatureRottenBySec ?? 3600f;
-            float timerRotten = GameUltis.GetLocalLongTime() - this.startTime;
+            float timerRotten = GameUltis.GetTimePassSinceTimeLongValue(this.startTime);
 
             //Something wrong if <= 0 so remove it anyway
             //Or
@@ -103,6 +151,7 @@ public class GameCreatureData : BaseGameData
         else // Not reach max yet
         {
             this.currentProductAmount++;
+            //Debug.LogError($"Add product: {this.currentProductAmount}");
             SetStartTime();
             return false;
         }

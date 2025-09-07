@@ -15,6 +15,20 @@ public static class GameUltis
         return DateTime.FromFileTime(value);
     }
 
+    public static long GetTimePassSinceTimeLongValue(long value)
+    {
+        var time = GetLocalTimeByLong(value);
+        //Debug.LogError($"Now: {DateTime.Now} - Save: {time}");
+        return DateTime.Now.Subtract(time).Seconds;
+    }
+
+    public static long AddTimeSecond2DateTime(long targetTime, long addSec)
+    {
+        var time = GetLocalTimeByLong(targetTime);
+        time.AddSeconds(addSec);
+        return time.ToFileTime();
+    }
+
     public static ItemType ConvertTypeSeed2Creature(ItemType seedType)
     {
         return (ItemType)((int)seedType + 100);

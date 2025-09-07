@@ -60,7 +60,7 @@ public class CreaturesManager : MonoSingleton<CreaturesManager>
             return;
         }
 
-        var creatureDatasClone = CreatureDatas.GetCloneCreatureDatas();
+        var creatureDatasClone = CreatureDatas.CreatureDatas;
         for (int i = 0; i < creatureDatasClone.Count; i++)
         {
             CreateCreatureItem(creatureDatasClone[i]);
