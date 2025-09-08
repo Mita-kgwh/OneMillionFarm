@@ -80,8 +80,10 @@ public class CreaturesManager : MonoSingleton<CreaturesManager>
 
         for (int i = 0; i < listActive.Count; i++)
         {
+            listActive[i].gameObject.SetActive(false);
             Return2FreePool(listActive[i]);
         }
+        creatureDatas = null;
     }
 
 

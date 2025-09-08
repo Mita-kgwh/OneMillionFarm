@@ -116,16 +116,13 @@ public class FarmTileManager : MonoSingleton<FarmTileManager>
 
     public void RestartGame()
     {
-        //TODO Use Pool Later
-        
-        int i = 0;
-        while (i < tiles.Count)
+        var spawnManager = SpawnObjectManager.Instance;
+        for (int i = 0; i < tiles.Count; i++)
         {
-            var temp = tiles[i];
-            tiles.RemoveAt(0);
-            Destroy(temp.gameObject);
+            spawnManager.Return2Pool(tiles[i]);
         }
 
+        tiles.Clear();
         this.farmTileDatas = null;
         this.dicFindFarmTile.Clear();
 

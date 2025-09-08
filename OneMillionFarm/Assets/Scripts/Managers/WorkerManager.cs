@@ -48,15 +48,13 @@ public class WorkerManager : MonoSingleton<WorkerManager>
 
     public void RestartGame()
     {
-        //TODO Use Pool Later
-        int i = 0;
-        while (i < workerActors.Count)
+        var spawnManager = SpawnObjectManager.Instance;
+        for (int i = 0; i < workerActors.Count; i++)
         {
-            var temp = workerActors[i];
-            workerActors.RemoveAt(i);
-            Destroy(temp.gameObject);
+            spawnManager.Return2Pool(workerActors[i]);
         }
 
+        workerActors.Clear();
         gameWorkerDatas = null;
         dicFindWorker.Clear();
     }
@@ -122,7 +120,6 @@ public class WorkerManager : MonoSingleton<WorkerManager>
         
         if (freeWorkerData == null)
         { 
-
             return null; 
         }
 
