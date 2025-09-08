@@ -53,7 +53,12 @@ public class StoreItem : MonoBehaviour
 
         this.tmpName.SetText(itemConfig.NameItem);
         this.tmpPrice.SetText($"{itemConfig.TradingValue}");
-        this.tmpPurchaseAmount.SetText($"{itemConfig.TradingAmount}");        
+        this.tmpPurchaseAmount.SetText($"{itemConfig.TradingAmount}");
+        var cf = GameAssetsConfigs.Instance.GetGameAssetsConfig(this.itemConfig.TypeItem);
+        if (cf != null)
+        {
+            this.imgIcon.sprite = cf.iconSpr;
+        }
     }
 
     public void Button_PurchaseItem()

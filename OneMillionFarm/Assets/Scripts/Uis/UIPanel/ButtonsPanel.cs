@@ -2,32 +2,39 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EquipmentPanel : BaseStatsPanel
+public class ButtonsPanel : BaseStatsPanel
 {
-    public TMPro.TextMeshProUGUI tmpEquipmentLv;
-
     protected override void AssignCallback()
     {
         BaseDialog.OnShowDialog += OnShowDialogCallback;
         BaseDialog.OnHideDialog += OnHideDialogCallback;
-        UserGameStatsData.OnUpgradeEquipment += OnUpgradeEquipmentCallback;
     }
 
     protected override void UnassignCallback()
     {
         BaseDialog.OnShowDialog -= OnShowDialogCallback;
         BaseDialog.OnHideDialog -= OnHideDialogCallback;
-        UserGameStatsData.OnUpgradeEquipment -= OnUpgradeEquipmentCallback;
+    }
+
+    public void Button_Show()
+    {
+        if (animating)
+        {
+            return;
+        }
+        AnimationShow();
+    }
+
+    public void Button_Hide()
+    {
+        if (animating)
+        {
+            return;
+        }
+        AnimationHide();
     }
 
     #region Callback
-
-    private void OnUpgradeEquipmentCallback(int equipmentLv)
-    {
-        this.tmpEquipmentLv.SetText($"Level: {equipmentLv + 1}");
-    }
-
-
     private void OnShowDialogCallback(BaseDialog baseDialog)
     {
         AnimationHide();

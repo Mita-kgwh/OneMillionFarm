@@ -6,12 +6,14 @@ using UnityEngine;
 public class GameDataManager : MonoSingleton<GameDataManager>
 {
     [SerializeField] private GameStatsConfigs statsConfigs;
+    [SerializeField] private GameAssetsConfigs assetsConfigs;
 
     private string KeySaveGameDatas = "UserFarmGameDatas";
 
     public static System.Action OnLoadDataDone;
 
     public GameStatsConfigs StatsConfigs => statsConfigs;
+    public GameAssetsConfigs AssetsConfigs => assetsConfigs;
 
     private UserGameDatas userGameDatas;
 

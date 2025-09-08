@@ -39,10 +39,17 @@ public class SlotItemUI : MonoBehaviour, IPointerClickHandler
         quantityText.gameObject.SetActive(true);
         quantityText.text = itemData.Amount.ToString();
         this.itemType = itemData.ItemType;
+        var cf = GameAssetsConfigs.Instance.GetGameAssetsConfig(this.itemType);
+        if (cf != null)
+        {
+            this.itemIcon.sprite = cf.iconSpr;
+        }
+        this.itemIcon.gameObject.SetActive(cf != null);
     }
 
     public virtual void SetEmpty()
     {
+        itemIcon.gameObject.SetActive(false);
         itemIcon.sprite = null;
         itemIcon.color = new Color(1, 1, 1, 0);
         quantityText.text = "";
