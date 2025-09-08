@@ -27,6 +27,19 @@ public class StoreItemConfigs : ScriptableObject
             return storeItemConfigs;
         }
     }
+
+    public StoreItemConfig GetStoreItemConfigByType(ItemType _itemType)
+    {
+        for (int i = 0; i < storeItemConfigs.Count; i++)
+        {
+            if (storeItemConfigs[i].TypeItem == _itemType)
+            {
+                return storeItemConfigs[i];
+            }
+        }
+
+        return null;
+    }
 }
 
 [System.Serializable]

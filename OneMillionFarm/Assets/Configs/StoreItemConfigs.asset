@@ -45,3 +45,11 @@ MonoBehaviour:
     nameItem: COW
     tradingValue: 100
     tradingAmount: 1
+  - itemType: 500
+    nameItem: WORKER
+    tradingValue: 500
+    tradingAmount: 1
+  - itemType: 600
+    nameItem: FARM TILE
+    tradingValue: 500
+    tradingAmount: 1

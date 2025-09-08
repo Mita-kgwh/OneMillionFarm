@@ -15,7 +15,7 @@ public class FarmTile : WorkableObject
 
     public bool IsFree => creatureItem == null;
 
-    private void Awake()
+    protected override void Awake()
     {
         UnassignCallback();
         AssignCallback();

@@ -33,6 +33,11 @@ public class FarmTileManager : MonoSingleton<FarmTileManager>
         base.Init();
         UnassignCallback();
         AssignCallback();
+        var storeCf = StoreItemConfigs.Instance.GetStoreItemConfigByType(ItemType.FARMTILE);
+        if (storeCf != null)
+        {
+            this.costBuyFarmTile = storeCf.TradingValue;
+        }
     }
 
     protected override void OnDestroy()

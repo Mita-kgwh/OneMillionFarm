@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 9212763171907657934}
   - component: {fileID: 4314946338145792583}
   - component: {fileID: 7268063012524574131}
+  - component: {fileID: 8291595831550803977}
   m_Layer: 7
   m_Name: Worker
   m_TagString: Untagged
@@ -78,8 +79,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 972da09d3c550334ca0818da9f61d553, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  objectID: 0
   objectType: 500
-  workerId: 0
+  objectAnimation: {fileID: 8291595831550803977}
+  timer: 10
+  moveSpeed: 2
 --- !u!136 &7268063012524574131
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -103,6 +107,19 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &8291595831550803977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1405585653372872886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd1c08379f2af724881dbcae2dc6d979, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetAnimation: {fileID: 6363933070837146990}
 --- !u!1 &2266011396318808985
 GameObject:
   m_ObjectHideFlags: 0

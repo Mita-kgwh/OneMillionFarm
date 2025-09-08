@@ -7,6 +7,9 @@ public class BaseObject : MonoBehaviour
     [SerializeField] protected int objectID;
 
     [SerializeField] protected ItemType objectType;
+
+    [SerializeField] protected BaseObjectAnimation objectAnimation;
+
     public ItemType ObjectType => objectType;
 
     public int ObjectID => this.objectID;
@@ -14,6 +17,14 @@ public class BaseObject : MonoBehaviour
     protected BaseCreatureBehaviour creatureBehaviour;
 
     public static System.Action<BaseObject, bool> OnInteractAction;
+
+    protected virtual void Awake()
+    {
+        if (objectAnimation != null)
+        {
+            objectAnimation.Init(this);
+        }
+    }
 
     public virtual void DoInteractAction()
     {

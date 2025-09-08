@@ -4,17 +4,23 @@ using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 
 public class WorkerActor : BaseObject, IUpdateable
-{
+{   
     public float timer = 10f;
+
+    public float moveSpeed = 2f;
+
     public int WorkerID => this.ObjectID;
     public bool IsFree => workableObject == null;
 
     private WorkableObject workableObject;
 
+    public WorkableObject WorkableObject => workableObject;
+
     private WorkerManager workerMan;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         workerMan = WorkerManager.Instance;
     }
 
@@ -170,7 +176,7 @@ public class WorkerActor : BaseObject, IUpdateable
 
         //Do action
         workableObject.WorkerDoInteractAction();
-
+        objectAnimation.StopAnimation();
         //Find new
         FindWorkableObject();
     }
@@ -179,7 +185,7 @@ public class WorkerActor : BaseObject, IUpdateable
     /// Priority => Collect Creature > Plant/Raise in FarmTile
     /// </summary>
     private void FindWorkableObject()
-    {
+    {       
         if (workableObject != null)
         {
             workableObject.UnassignWorker();
@@ -194,6 +200,7 @@ public class WorkerActor : BaseObject, IUpdateable
             if (CheckValidObject())
             {
                 //Nothing to do, wait for new thing happen (free farm tile/have thing to collect)
+                objectAnimation.PlayIdle();
                 return;
             }
         }
@@ -208,10 +215,25 @@ public class WorkerActor : BaseObject, IUpdateable
             if (workableObject.CanAssignWorker)
             {
                 workableObject.AssignWorker(WorkerID);
+                DoMove2Target();
                 return true;
             }
 
             return false;
         }
+    }
+
+    private void DoMove2Target()
+    {
+        //return;
+        objectAnimation.StopAnimation();
+        objectAnimation.PlayMove(OnReachTarget);
+    }
+
+    private void OnReachTarget()
+    {
+        //return;
+        objectAnimation.StopAnimation();
+        objectAnimation.PlayInteracting();
     }
 }
