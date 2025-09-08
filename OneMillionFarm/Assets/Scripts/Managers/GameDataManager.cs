@@ -70,9 +70,43 @@ public class GameDataManager : MonoSingleton<GameDataManager>
         }
     }
 
+    private void AssignCallback()
+    {
+        UserGameStatsData.OnCoinChange += OnCoinChangeCallback;
+    }
+
+    private void UnassignCallback()
+    {
+        UserGameStatsData.OnCoinChange -= OnCoinChangeCallback;
+    }
+
+    private void OnCoinChangeCallback(int curCoin, int amountChange)
+    {
+        if (curCoin >= StatsConfigs.CoinWinGame)
+        {
+
+        }
+    }
+
+
+    public void ReStartGame()
+    {
+        CreateNewData();
+        Init();
+    }
+
     public override void Init()
     {
         StartCoroutine(IE_LoadData());
+        UnassignCallback();
+        AssignCallback();
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        UnassignCallback();
+        SaveData();
     }
 
     private IEnumerator IE_LoadData()
@@ -127,12 +161,6 @@ public class GameDataManager : MonoSingleton<GameDataManager>
     private void OnOpenGame()
     {
         UserGameDatas.OpenGame();
-    }
-
-    protected override void OnDestroy()
-    {
-        base.OnDestroy();
-        SaveData();
     }
 
     public void SaveData()

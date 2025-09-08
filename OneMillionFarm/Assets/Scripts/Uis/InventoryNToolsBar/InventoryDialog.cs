@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InventoryDialog : BaseDialog
 {
     [SerializeField] protected SlotItemLayout slotItemLayout;
+    [SerializeField] protected TMPro.TextMeshProUGUI tmpProductsValue;
+    [SerializeField] protected Button btnSell;
     private bool inited = false;
 
     public static InventoryDialog DoShowDialog()
@@ -13,9 +16,8 @@ public class InventoryDialog : BaseDialog
         if (dialog == null)
             return null;
         if (dialog is InventoryDialog inventoryDialog)
-        {
-            var itemDatas = GameStorageItemDatas.Instance.StorageItemDatas;
-            inventoryDialog.ParseData(itemDatas);
+        {            
+            inventoryDialog.ParseData();
             inventoryDialog.ShowDialog();
 
             return inventoryDialog;
@@ -23,6 +25,33 @@ public class InventoryDialog : BaseDialog
 
         return null;
     }
+
+    private void OnEnable()
+    {
+        UnassignCallback();
+        AssignCallback();
+    }
+
+    private void OnDisable()
+    {
+        UnassignCallback();
+    }
+
+    private void AssignCallback()
+    {
+        GameStorageItemDatas.OnStorageDataChange += OnStorageDataChangeCallback;
+    }
+
+    private void UnassignCallback()
+    {
+        GameStorageItemDatas.OnStorageDataChange -= OnStorageDataChangeCallback;
+    }
+
+    private void OnStorageDataChangeCallback()
+    {
+        ParseData();
+    }
+
 
     private void InitDialog()
     {
@@ -34,8 +63,10 @@ public class InventoryDialog : BaseDialog
         slotItemLayout.InitLayout(SlotType.INVENTORY);
     }
 
-    public void ParseData(List<GameStorageItemData> itemDatas)
+    public void ParseData()
     {
+        var itemDatas = GameStorageItemDatas.Instance.StorageItemDatas;
+
         if (slotItemLayout == null)
         {
             Debug.LogError("Slot item layout null");
@@ -48,7 +79,11 @@ public class InventoryDialog : BaseDialog
             inited = true;
         }
         
-        slotItemLayout.ParseData(itemDatas);        
+        slotItemLayout.ParseData(itemDatas);
+
+        var allProductValue = GameStorageItemDatas.Instance.GetSumValueAllProductsInBag();
+        btnSell.gameObject.SetActive(allProductValue > 0);
+        tmpProductsValue.SetText($"{allProductValue}");
     }
 
     public void Button_SellAllProduct()

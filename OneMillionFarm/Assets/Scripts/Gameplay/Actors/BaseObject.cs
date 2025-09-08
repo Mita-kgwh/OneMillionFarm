@@ -14,8 +14,6 @@ public class BaseObject : MonoBehaviour
 
     public int ObjectID => this.objectID;
 
-    protected BaseCreatureBehaviour creatureBehaviour;
-
     public static System.Action<BaseObject, bool> OnInteractAction;
 
     protected virtual void Awake()

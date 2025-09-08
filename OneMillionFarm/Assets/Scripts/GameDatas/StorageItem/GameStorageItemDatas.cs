@@ -213,6 +213,34 @@ public class GameStorageItemDatas : BaseGameData
         SaveData();
     }
 
+    public int GetSumValueAllProductsInBag()
+    {
+        int sum = 0;
+        int startId = (int)ItemType.PRODUCT_TOMATO;
+        int endId = (int)ItemType.PRODUCT_COW;
+        List<GameStorageItemData> rdDataItems = new List<GameStorageItemData>();
+        for (int i = startId; i < endId; i++)
+        {
+            var itemData = GetGameStorageItemDataByType((ItemType)i);
+            if (itemData != null)
+            {
+                rdDataItems.Add(itemData);
+            }
+        }
+
+        var storeCfs = StoreItemConfigs.Instance;
+        for (int i = 0; i < rdDataItems.Count; i++)
+        {
+            var cf = storeCfs.GetStoreItemConfigByType(rdDataItems[i].ItemType);
+            if (cf != null)
+            {
+                sum += cf.TradingValue * rdDataItems[i].Amount;
+            }
+        }
+
+        return sum;
+    }
+
     public void SellAllProduct()
     {
         int startId = (int)ItemType.PRODUCT_TOMATO;

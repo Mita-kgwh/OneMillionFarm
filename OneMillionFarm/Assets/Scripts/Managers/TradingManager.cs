@@ -102,11 +102,6 @@ public class TradingManager : MonoSingleton<TradingManager>
             return false;
         }
 
-        if (!userGameStatsData.IsCanUse(tradingValue))
-        {
-            return false;
-        }
-
         userGameStatsData.AddCoin(tradingValue);
         OnTradingSuccess?.Invoke(false, itemType, tradingAmount);
 

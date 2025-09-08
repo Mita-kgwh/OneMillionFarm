@@ -11,8 +11,9 @@ public class GameStatsConfigs : ScriptableObject
         {
             return GameDataManager.Instance.StatsConfigs;
         }
-    }   
+    }
 
+    public int coinWinGame = 1000000;
     public int startWorkerAmount = 1;
     public int startFarmTileAmount = 3;
     public int maxColFarmTile = 5;
@@ -35,6 +36,7 @@ public class GameStatsConfigs : ScriptableObject
     public float EquipmentBoost => this.equipmentBoost;
     public int MaxEquipmentLevel => this.maxEquipmentLevel;
     public int CostUpgradeEquipment => this.costUpgradeEquipment;
+    public int CoinWinGame => this.coinWinGame;
 
     public List<ItemTypeAmount> ItemAmountClone()
     {
