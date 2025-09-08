@@ -43,4 +43,5 @@ public enum DialogType
     INVENTORY_DIALOG = 0,
     STORE_DIALOG = 1,
     WIN_GAME_DIALOG = 2,
+    INFO_CREATURE_DIALOG = 3,
 }
