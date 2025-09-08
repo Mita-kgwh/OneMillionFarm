@@ -71,7 +71,7 @@ public class PlayerRaycastHandler : MonoBehaviour
                 return;
             if (touch.phase == TouchPhase.Began)
             {
-                RaycastBus();
+                RaycastObject();
             }
         }
 #endif
