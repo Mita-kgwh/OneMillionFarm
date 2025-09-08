@@ -11,6 +11,7 @@ public class BaseStatsPanel : MonoBehaviour
     protected Sequence curSeq;
     protected string animID = string.Empty;
     protected float offset;
+    protected float duration = 0.3f;
 
     protected virtual void Awake()
     {
@@ -41,7 +42,7 @@ public class BaseStatsPanel : MonoBehaviour
         animating = true;
         curSeq = DOTween.Sequence();
         curSeq.SetId(animID);
-        curSeq.Append(contentPanel.DOLocalMoveX(0, 0.5f));
+        curSeq.Append(contentPanel.DOLocalMoveX(0, duration));
         curSeq.OnComplete(() =>
         {
             animating = false;
@@ -53,7 +54,7 @@ public class BaseStatsPanel : MonoBehaviour
         animating = true;
         curSeq = DOTween.Sequence();
         curSeq.SetId(animID);
-        curSeq.Append(contentPanel.DOLocalMoveX(offset, 0.5f));
+        curSeq.Append(contentPanel.DOLocalMoveX(offset, duration));
         curSeq.OnComplete(() =>
         {
             animating = false;

@@ -21,7 +21,7 @@ public class BaseCreatureItem : WorkableObject, IUpdateable
             return CurrentProductAmount > 0;
         }
     }
-    protected virtual int CurrentProductAmount
+    public virtual int CurrentProductAmount
     {
         get
         {
@@ -33,7 +33,7 @@ public class BaseCreatureItem : WorkableObject, IUpdateable
             return creatureData.CurrentProductAmount;
         }
     }
-    protected virtual int CollectedProductAmount
+    public virtual int CollectedProductAmount
     {
         get
         {
@@ -43,6 +43,32 @@ public class BaseCreatureItem : WorkableObject, IUpdateable
             }
 
             return creatureData.CollectedProductAmount;
+        }
+    }
+
+    public float LifeCycle
+    {
+        get
+        {
+            if (CreatureStatsConfig == null)
+            {
+                return -1;
+            }
+
+            return creatureStatsConfig.CycleTimeBySec;
+        }
+    }
+
+    public int MaxLifeCycle
+    {
+        get
+        {
+            if (CreatureStatsConfig == null)
+            {
+                return -1;
+            }
+
+            return creatureStatsConfig.CycleLifeCount;
         }
     }
 
@@ -81,6 +107,7 @@ public class BaseCreatureItem : WorkableObject, IUpdateable
     {
         base.DoInteractAction();
         //Debug.Log($"This is Creature {this.CreatureID}");
+        InfoCreatureDialog.DoShowDialog(this);
         ///Collected
         CollectedProduct();
     }
@@ -89,7 +116,7 @@ public class BaseCreatureItem : WorkableObject, IUpdateable
     {
         base.WorkerDoInteractAction();
         //Debug.LogError($"Worker collect product");
-        DoInteractAction();
+        CollectedProduct();
     }
 
     private void OnDisable()
