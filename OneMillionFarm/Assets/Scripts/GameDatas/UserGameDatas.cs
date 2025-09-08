@@ -83,15 +83,6 @@ public class UserGameDatas : BaseGameData
         }
     }
 
-    public void ParseData(UserGameDatas data)
-    {
-        this.workerDatas = data.workerDatas;
-        this.farmTileDatas = data.farmTileDatas;
-        this.creatureDatas = data.creatureDatas;
-        this.gameStatsData = data.gameStatsData;
-        this.storageItemDatas = data.storageItemDatas;
-    }
-
     public override void Init()
     {
         base.Init();

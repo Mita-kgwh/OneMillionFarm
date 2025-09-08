@@ -101,9 +101,9 @@ public class TradingManager : MonoSingleton<TradingManager>
         {
             return false;
         }
-
-        userGameStatsData.AddCoin(tradingValue);
-        OnTradingSuccess?.Invoke(false, itemType, tradingAmount);
+        var sum = tradingValue * tradingAmount;
+        userGameStatsData.AddCoin(sum);
+        OnTradingSuccess?.Invoke(false, itemType, sum);
 
         return true;
     }

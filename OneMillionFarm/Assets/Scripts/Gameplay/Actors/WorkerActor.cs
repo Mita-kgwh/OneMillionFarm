@@ -12,7 +12,7 @@ public class WorkerActor : BaseObject, IUpdateable
     public int WorkerID => this.ObjectID;
     public bool IsFree => workableObject == null;
 
-    private WorkableObject workableObject;
+    [SerializeField] private WorkableObject workableObject;
 
     public WorkableObject WorkableObject => workableObject;
 

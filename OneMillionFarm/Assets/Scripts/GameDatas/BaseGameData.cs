@@ -10,7 +10,6 @@ public class BaseGameData
     public virtual void OpenGame()
     { }
 
-
     protected GameDataManager mainDataInstance;
     protected virtual void SaveData()
     {

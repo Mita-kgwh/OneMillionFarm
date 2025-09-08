@@ -96,6 +96,7 @@ public class UserGameStatsData : BaseGameData
 
     public void UpgradeEquipment()
     {
+        UseCoin(GameStatsConfigs.CostUpgradeEquipment);
         this.equipmentLv++;
         Debug.LogError($"{equipmentLv}");
         OnUpgradeEquipment?.Invoke(equipmentLv);

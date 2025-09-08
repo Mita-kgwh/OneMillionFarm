@@ -11,6 +11,7 @@ public class GameDataManager : MonoSingleton<GameDataManager>
     private string KeySaveGameDatas = "UserFarmGameDatas";
 
     public static System.Action OnLoadDataDone;
+    public static System.Action OnRestartGame;
 
     public GameStatsConfigs StatsConfigs => statsConfigs;
     public GameAssetsConfigs AssetsConfigs => assetsConfigs;
@@ -84,15 +85,26 @@ public class GameDataManager : MonoSingleton<GameDataManager>
     {
         if (curCoin >= StatsConfigs.CoinWinGame)
         {
-
+            WinGameDialog.DoShowDialog();
         }
     }
 
 
     public void ReStartGame()
     {
+        StartCoroutine(IE_RestartGameData());
+    }
+
+    private IEnumerator IE_RestartGameData()
+    {
         CreateNewData();
-        Init();
+        yield return new WaitForSeconds(0.2f);
+        OnOpenGame();
+        yield return new WaitForEndOfFrame();
+        SaveData();
+        yield return new WaitForSeconds(0.3f);
+
+        OnRestartGame?.Invoke();
     }
 
     public override void Init()
@@ -128,7 +140,7 @@ public class GameDataManager : MonoSingleton<GameDataManager>
 
     }
 
-    private void CreateNewData()
+    public void CreateNewData()
     {
         userGameDatas = new UserGameDatas();
         userGameDatas.Init();

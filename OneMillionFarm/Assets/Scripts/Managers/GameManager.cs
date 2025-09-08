@@ -20,11 +20,13 @@ public class GameManager : MonoSingleton<GameManager>
     private void AssignCallback()
     {
         GameDataManager.OnLoadDataDone += OnLoadDataDoneCallback;
+        GameDataManager.OnRestartGame += OnRestartGameCallback;
     }
 
     private void UnassignCallback()
     {
         GameDataManager.OnLoadDataDone -= OnLoadDataDoneCallback;
+        GameDataManager.OnRestartGame -= OnRestartGameCallback;
     }
 
     #region Callback
@@ -32,6 +34,11 @@ public class GameManager : MonoSingleton<GameManager>
     private void OnLoadDataDoneCallback()
     {
         StartGame();
+    }
+
+    private void OnRestartGameCallback()
+    {
+        RestartGame();
     }
 
     #endregion
@@ -46,5 +53,19 @@ public class GameManager : MonoSingleton<GameManager>
 
         //Create Worker
         WorkerManager.Instance.StartGame();
+    }
+
+    private void RestartGame()
+    {
+        //Restart Farm Tile
+        FarmTileManager.Instance.RestartGame();
+
+        //Restart Plant/Cow
+        CreaturesManager.Instance.RestartGame();
+
+        //Restart Worker
+        WorkerManager.Instance.RestartGame();
+
+        StartGame();
     }
 }

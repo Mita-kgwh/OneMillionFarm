@@ -12,10 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 217a79166846d5541b00e01c37f666da, type: 3}
   m_Name: GameStatsConfigs
   m_EditorClassIdentifier: 
+  coinWinGame: 1000000
   startWorkerAmount: 1
   startFarmTileAmount: 7
-  maxColFarmTile: 5
+  maxColFarmTile: 10
+  starterCoin: 0
   startEquipmentLv: 1
+  equipmentBoost: 0.1
+  maxEquipmentLevel: 6
+  costUpgradeEquipment: 500
+  storageSize: 21
   itemAmounts:
   - itemType: 100
     amount: 10

@@ -11,8 +11,17 @@ public class DialogManager : MonoSingleton<DialogManager>
     public override void Init()
     {
         base.Init();
+        CloseAllDialog();
+    }
+
+    public void CloseAllDialog(DialogType keepDialog = DialogType.NONE)
+    {
         for (int i = 0; i < baseDialogs.Count; i++)
         {
+            if (baseDialogs[i].DialogType == keepDialog)
+            {
+                continue;
+            }
             baseDialogs[i].CloseDialog();
         }
     }

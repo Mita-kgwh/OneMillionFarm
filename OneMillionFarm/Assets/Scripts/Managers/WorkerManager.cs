@@ -46,6 +46,22 @@ public class WorkerManager : MonoSingleton<WorkerManager>
         }
     }
 
+    public void RestartGame()
+    {
+        //TODO Use Pool Later
+        int i = 0;
+        while (i < workerActors.Count)
+        {
+            var temp = workerActors[i];
+            workerActors.RemoveAt(i);
+            Destroy(temp.gameObject);
+        }
+
+        gameWorkerDatas = null;
+        dicFindWorker.Clear();
+    }
+
+
     #region 
 
     public WorkerActor BuyWorker()
@@ -69,7 +85,7 @@ public class WorkerManager : MonoSingleton<WorkerManager>
         }
 
         var neWorker = CreateWorker(newWorkerData);
-       
+        neWorker.transform.localPosition += Vector3.forward;
         return neWorker;
     }
 

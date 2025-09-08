@@ -67,6 +67,24 @@ public class CreaturesManager : MonoSingleton<CreaturesManager>
         }
     }
 
+    public void RestartGame()
+    {
+        var listActive = new List<BaseCreatureItem>();
+        foreach (var subActiveDic in activeCreaturePools.Values)
+        {
+            foreach (var item in subActiveDic.Values)
+            {
+                listActive.Add(item);
+            }
+        }
+
+        for (int i = 0; i < listActive.Count; i++)
+        {
+            Return2FreePool(listActive[i]);
+        }
+    }
+
+
     public BaseCreatureItem CreateCreatureItem(GameCreatureData creatureData)
     {
         if (creatureData == null)

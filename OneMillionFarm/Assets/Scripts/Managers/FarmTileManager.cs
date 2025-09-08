@@ -99,8 +99,37 @@ public class FarmTileManager : MonoSingleton<FarmTileManager>
             CreateFarmTile(farmTileDatasClone[i]);
         }
 
+        DelayUpdateLayout();
+    }
+
+    private void DelayUpdateLayout()
+    {
+        StartCoroutine(IE_UpdateLayout());
+    } 
+
+    private IEnumerator IE_UpdateLayout()
+    {
+        yield return new WaitForSeconds(0.3f);
         // Update 3D layout after creating all blocks
         gridLayout3D.UpdateLayout();
+    }
+
+    public void RestartGame()
+    {
+        //TODO Use Pool Later
+        
+        int i = 0;
+        while (i < tiles.Count)
+        {
+            var temp = tiles[i];
+            tiles.RemoveAt(0);
+            Destroy(temp.gameObject);
+        }
+
+        this.farmTileDatas = null;
+        this.dicFindFarmTile.Clear();
+
+        DelayUpdateLayout();
     }
 
     #region
@@ -117,6 +146,8 @@ public class FarmTileManager : MonoSingleton<FarmTileManager>
         {
             return null;
         }
+
+        coinData.UseCoin(costBuyFarmTile);
 
         var newFarmTileData = FarmTileDatas.AddFarmTileData();
 

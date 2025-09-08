@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: GameWorkersConfigs
   m_EditorClassIdentifier: 
   costBuyWorker: 500
-  timeWorkerDoAction: 5
+  timeWorkerDoAction: 120

@@ -42,4 +42,5 @@ public enum DialogType
     NONE = -1,
     INVENTORY_DIALOG = 0,
     STORE_DIALOG = 1,
+    WIN_GAME_DIALOG = 2,
 }

@@ -31,18 +31,7 @@ public class GameWorkerDatas : BaseGameData
         }
     }
 
-    //public List<GameWorkerData> GetCloneWorkerDatas()
-    //{
-    //    var results = new List<GameWorkerData>();
-    //    if (WorkerDatas == null)
-    //        return results;
-
-    //    for (int i = 0; i < workerDatas.Count; i++)
-    //    {
-    //        results.Add(workerDatas[i].Clone());
-    //    }
-    //    return results;
-    //}
+    private int startId = 100000;
 
     public override void Init()
     {
@@ -60,7 +49,7 @@ public class GameWorkerDatas : BaseGameData
         }
     }
     
-    private int startId = 100000;
+    
 
     public GameWorkerData AddWorkerData()
     {
