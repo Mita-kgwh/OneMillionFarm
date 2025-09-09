@@ -5,6 +5,7 @@ using UnityEngine;
 public class EquipmentPanel : BaseStatsPanel
 {
     public TMPro.TextMeshProUGUI tmpEquipmentLv;
+    public TMPro.TextMeshProUGUI tmpBonusEquipment;
 
     protected override void AssignCallback()
     {
@@ -22,9 +23,10 @@ public class EquipmentPanel : BaseStatsPanel
 
     #region Callback
 
-    private void OnUpgradeEquipmentCallback(int equipmentLv)
+    private void OnUpgradeEquipmentCallback(int equipmentLv, float boostBonus)
     {
         this.tmpEquipmentLv.SetText($"Level: {equipmentLv + 1}");
+        this.tmpBonusEquipment.SetText($"-{boostBonus * 100f}%");
     }
 
 

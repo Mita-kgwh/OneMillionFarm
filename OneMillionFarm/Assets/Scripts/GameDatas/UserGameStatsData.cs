@@ -22,7 +22,7 @@ public class UserGameStatsData : BaseGameData
     public int equipmentLv;
     //private string COIN_KEY = "GAME_COIN";
     public static System.Action<int, int> OnCoinChange;
-    public static System.Action<int> OnUpgradeEquipment;
+    public static System.Action<int, float> OnUpgradeEquipment;
     public int CurrentCoin => this.currentCoin;
     public int EquipmentLv => this.equipmentLv;
     public float EquipmentBoost
@@ -60,7 +60,7 @@ public class UserGameStatsData : BaseGameData
         base.OpenGame();
 
         OnCoinChange?.Invoke(currentCoin, 0);
-        OnUpgradeEquipment?.Invoke(equipmentLv);
+        OnUpgradeEquipment?.Invoke(equipmentLv, EquipmentBoost);
     }
     #region COin
     public bool IsCanUse(int amount)
@@ -99,7 +99,7 @@ public class UserGameStatsData : BaseGameData
         UseCoin(GameStatsConfigs.CostUpgradeEquipment);
         this.equipmentLv++;
         //Debug.LogError($"{equipmentLv}");
-        OnUpgradeEquipment?.Invoke(equipmentLv);
+        OnUpgradeEquipment?.Invoke(equipmentLv, EquipmentBoost);
         SaveData();
     }
 
