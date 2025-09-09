@@ -52,6 +52,8 @@ public class UserGameStatsData : BaseGameData
         if (GameStatsConfigs != null)
         {
             AddCoin(this.gameStatsConfigs.StarterCoin);
+            this.equipmentLv = System.Math.Max(0, this.gameStatsConfigs.StartEquipmentLv);
+
         }
     }
 

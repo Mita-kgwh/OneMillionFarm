@@ -14,15 +14,15 @@ public class GameStatsConfigs : ScriptableObject
     }
 
     public int coinWinGame = 1000000;
+    public int starterCoin = 0;
     public int startWorkerAmount = 1;
     public int startFarmTileAmount = 3;
     public int maxColFarmTile = 5;
-    public int starterCoin = 0;
     public int startEquipmentLv = 0;
-    //Decrease time cycle of creature by percent
-    public float equipmentBoost = 0.1f;
-    //60% Boost 
     public int maxEquipmentLevel = 6;
+    //Decrease time cycle of creature by percent
+    public float equipmentBoost = 10f;
+    //60% Boost 
     public int costUpgradeEquipment = 500;
     public int storageSize = 21;
     [Header("Items Starter")]

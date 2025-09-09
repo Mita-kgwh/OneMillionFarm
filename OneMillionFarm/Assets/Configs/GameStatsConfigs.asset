@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: GameStatsConfigs
   m_EditorClassIdentifier: 
   coinWinGame: 1000000
-  startWorkerAmount: 1
-  startFarmTileAmount: 7
-  maxColFarmTile: 10
   starterCoin: 0
-  startEquipmentLv: 1
-  equipmentBoost: 0.1
+  startWorkerAmount: 1
+  startFarmTileAmount: 3
+  maxColFarmTile: 10
+  startEquipmentLv: 0
   maxEquipmentLevel: 6
+  equipmentBoost: 0.1
   costUpgradeEquipment: 500
   storageSize: 21
   itemAmounts:
