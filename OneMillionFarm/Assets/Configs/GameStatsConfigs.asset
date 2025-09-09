@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GameStatsConfigs
   m_EditorClassIdentifier: 
   coinWinGame: 1000000
-  starterCoin: 0
+  starterCoin: 500
   startWorkerAmount: 1
   startFarmTileAmount: 3
   maxColFarmTile: 10

@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting.FullSerializer;
 using UnityEditor;
 using UnityEngine;
 
@@ -58,7 +57,7 @@ public class GameStatsConfigEditorWindow : EditorWindow
 
         // Header
         GUILayout.Space(10);
-        GUILayout.Label("Map Importer Tool", headerStyle);
+        GUILayout.Label("Game Stats Importer Tool", headerStyle);
         GUILayout.Space(20);
 
         DrawGameStatsPanel();
@@ -205,8 +204,55 @@ public class GameStatsConfigEditorWindow : EditorWindow
         }
 
         {
-            int storageSize = 9;
-            _config.storageSize = TryGetValueInSimpleTitleValueStr(rowConfigs[storageSize]);
+            int storageSizeRow = 9;
+            _config.storageSize = TryGetValueInSimpleTitleValueStr(rowConfigs[storageSizeRow]);
+        }
+
+        {
+            int startItemsRow = 10;
+            var results = new List<ItemTypeAmount>();
+            string[] itemValueDatas = rowConfigs[startItemsRow].Split(',');
+            //The first string is Title which we can pass
+            for (int i = 1; i < itemValueDatas.Length; i++)
+            {
+                //Format: [N]x [Type]
+                string[] startItemAmountData = itemValueDatas[i].Trim().ToLower().Split("x ");
+                if (startItemAmountData.Length >= 1 && int.TryParse(startItemAmountData[0], out int amount) && ConvertString2ItemTypeAmount(startItemAmountData[1], out int itemTypeID))
+                {
+                    results.Add(new ItemTypeAmount((ItemType)itemTypeID, amount));
+                }
+            }
+            _config.itemAmounts = results;
+        }
+    }
+
+    private bool ConvertString2ItemTypeAmount(string itemTypeStr, out int itemId)
+    {
+        if (string.IsNullOrEmpty(itemTypeStr))
+        {
+            itemId = 0;
+            return false;
+        }
+
+        string name = itemTypeStr.Trim();
+
+        switch (name)
+        {
+            case "sd_tomato":
+                itemId = (int)ItemType.SEED_TOMATO;
+                return true;
+            case "sd_blue":
+                itemId = (int)ItemType.SEED_BLUE_BERRY;
+                return true;
+            case "sd_straw":
+                itemId = (int)ItemType.SEED_STRAW_BERRY;
+                return true;
+            case "sd_cow":
+                itemId = (int)ItemType.SEED_COW;
+                return true;
+            default:
+                itemId = 0;
+                return false;
         }
     }
 
